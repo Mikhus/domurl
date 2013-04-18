@@ -81,6 +81,12 @@ Usage Examples
     
     // inject into string
     var str = '<a href="' + u + '">My Cool Link</a>';
+    
+    // or use in DOM context
+    var a = document.createElement('a');
+    a.href = u;
+    a.innerHTML = 'test';
+    document.body.appendChild( a)
     </script>
 
 License
