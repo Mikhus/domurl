@@ -67,6 +67,16 @@ u.query.a = [1, 2, 3]; // adds/replaces in query string params a=1&a=2&a=3
 u.query.b = 'woohoo';  // adds/replaces in query string param b=woohoo
 
 alert(u); // alerts string representation of modified URL
+// lookup URL parts:
+alert(
+    'protocol = ' + u.protocol + '\n' +
+    'host = ' + u.host + '\n' +
+    'port = ' + u.port + '\n' +
+    'path = ' + u.path + '\n' +
+    'query = ' + u.query + '\n' +
+    'hash = ' + u.hash
+);
+
 
 if (u.query.a instanceof Array) { // the way to add a parameter
   u.query.a.push(4); // now it's "a=1&a=2&a=3&a=4&b=woohoo"
