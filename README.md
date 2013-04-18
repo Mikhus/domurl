@@ -82,3 +82,8 @@ Usage Examples
     // inject into string
     var str = '<a href="' + u + '">My Cool Link</a>';
     </script>
+
+License
+=======
+
+This code is available under MIT license. Feel free to do what you want.
