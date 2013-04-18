@@ -55,39 +55,40 @@ mapping. String representation contains everything after "?" and to the end of Q
 
 Usage Examples
 ==============
-    <script>
-    var u  = new Url; // curent document URL will be used
-    // or we can instantiate as
-    var u2 = new Url( "http://example.com/some/path?a=b&c=d#someAnchor");
-    // it should support relative URLs also
-    var u3 = new Url( "/my/site/doc/path?foo=bar#baz");
-    
-    u.query.a = [1, 2, 3]; // adds/replaces in query string params a=1&a=2&a=3
-    u.query.b = 'woohoo';  // adds/replaces in query string param b=woohoo
-    
-    alert(u); // alerts string representation of modified URL
-    
-    if (u.query instanceof Array) { // the way to add a parameter
-      u.query.push(4); // now it's "a=1&a=2&a=3&a=4&b=woohoo"
-    }
-    
-    else { // if not an array but scalar value here is a way how to convert to array
-      u.query.a = [u.query.a];
-      u.query.a.push(8)
-    }
-    
-    u.path = '/some/new/path'; // the way to change URL path
-    u.protocol = 'https' // the way to force https protocol on the source URL
-    
-    // inject into string
-    var str = '<a href="' + u + '">My Cool Link</a>';
-    
-    // or use in DOM context
-    var a = document.createElement('a');
-    a.href = u;
-    a.innerHTML = 'test';
-    document.body.appendChild( a)
-    </script>
+
+```javascript
+var u  = new Url; // curent document URL will be used
+// or we can instantiate as
+var u2 = new Url( "http://example.com/some/path?a=b&c=d#someAnchor");
+// it should support relative URLs also
+var u3 = new Url( "/my/site/doc/path?foo=bar#baz");
+
+u.query.a = [1, 2, 3]; // adds/replaces in query string params a=1&a=2&a=3
+u.query.b = 'woohoo';  // adds/replaces in query string param b=woohoo
+
+alert(u); // alerts string representation of modified URL
+
+if (u.query.a instanceof Array) { // the way to add a parameter
+  u.query.a.push(4); // now it's "a=1&a=2&a=3&a=4&b=woohoo"
+}
+
+else { // if not an array but scalar value here is a way how to convert to array
+  u.query.a = [u.query.a];
+  u.query.a.push(8)
+}
+
+u.path = '/some/new/path'; // the way to change URL path
+u.protocol = 'https' // the way to force https protocol on the source URL
+
+// inject into string
+var str = '<a href="' + u + '">My Cool Link</a>';
+
+// or use in DOM context
+var a = document.createElement('a');
+a.href = u;
+a.innerHTML = 'test';
+document.body.appendChild( a)
+```
 
 License
 =======
