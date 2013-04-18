@@ -1,7 +1,7 @@
 jsurl
 =====
 
-Lightweight URL manipulation with JavaScript
+Lightweight URL manipulation with JavaScript. Minified and gzipped is 1.1KB
 
 Goal
 ====
