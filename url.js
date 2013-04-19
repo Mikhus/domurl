@@ -9,7 +9,7 @@
  * @author Mykhailo Stadnyk <mikhus@gmail.com>
  */
 ; var Url = (function() {
-  var
+	var
 		// mapping between what we want and <a> element properties
 		map = {
 			protocol : 'protocol',
@@ -24,7 +24,8 @@
 			var
 				d      = document,
 				link   = d.createElement( 'a'),
-				url    = url || d.location.href
+				url    = url || d.location.href,
+				auth   = url.match( /\/\/(.*?)(?::(.*?))?@/)
 			;
 
 			link.href = url;
@@ -37,6 +38,8 @@
 			self.protocol = self.protocol.replace( /:$/, '');
 			self.query    = self.query.replace( /^\?/, '');
 			self.hash     = self.hash.replace( /^#/, '');
+			self.user     = auth[1] || '';
+			self.pass     = auth[2] || '';
 
 			// destroy helper DOM element
 			link = null; delete link;
@@ -161,6 +164,7 @@
 		this.toString = function() {
 			return (
 				(this.protocol && (this.protocol + '://')) +
+				(this.user && (this.user + (this.pass && (':' + this.pass)) + '@')) +
 				(this.host && this.host) +
 				(this.port && (':' + this.port)) +
 				(this.path && this.path) +
