@@ -8,7 +8,7 @@
  * @license MIT
  * @author Mykhailo Stadnyk <mikhus@gmail.com>
  */
-var Url = (function() {
+; var Url = (function() {
   var
 		// mapping between what we want and <a> element properties
 		map = {
