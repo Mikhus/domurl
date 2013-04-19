@@ -40,11 +40,15 @@ operations is performed over Url objects this method is automatically called
 Properties:
 
 *protocol* - protocol part of URL, everything between the beginning of the URL string 
-and "://" delimiter
+and "://" delimiter (if specified)
 
-*host* - host name
+*user* - auth user name (if specified)
 
-*port* - port number
+*pass* - auth user password (if specified)
+
+*host* - host name (if specified)
+
+*port* - port number (if specified)
 
 *path* - document path
 
@@ -70,6 +74,8 @@ alert(u); // alerts string representation of modified URL
 // lookup URL parts:
 alert(
     'protocol = ' + u.protocol + '\n' +
+    'user = ' + u.user + '\n' +
+    'pass = ' + u.pass + '\n' +
     'host = ' + u.host + '\n' +
     'port = ' + u.port + '\n' +
     'path = ' + u.path + '\n' +
