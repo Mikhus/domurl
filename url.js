@@ -25,7 +25,7 @@
 				d      = document,
 				link   = d.createElement( 'a'),
 				url    = url || d.location.href,
-				auth   = url.match( /\/\/(.*?)(?::(.*?))?@/)
+				auth   = url.match( /\/\/(.*?)(?::(.*?))?@/) || []
 			;
 
 			link.href = url;
