@@ -25,6 +25,14 @@ Then any time it's required to do some work over the URL string, it's just requi
 instantiate the Url object and work with that object instead of initial string. See API
 description below to get a clue.
 
+Install with JAM
+================
+
+It is possible also to install jsurl via JAM repository (http://jamjs.org/).
+Could be simply done as:
+
+    $ jam install jsurl
+
 API
 ===
 
