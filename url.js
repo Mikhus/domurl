@@ -139,7 +139,7 @@
 							if (len) {
 								for (var ii = 0; ii < len; ii++) {
 									s += s ? '&' : '';
-									s += e( i) + '=' + e( this[i][ii])
+									s += e( i) + '=' + e( this[i][ii]);
 								}
 							}
 	
