@@ -9,6 +9,8 @@
  * @author Mykhailo Stadnyk <mikhus@gmail.com>
  */
 ; var Url = (function() {
+	"use strict";
+
 	var
 		// mapping between what we want and <a> element properties
 		map = {
@@ -40,9 +42,6 @@
 			self.hash     = self.hash.replace( /^#/, '');
 			self.user     = auth[1] || '';
 			self.pass     = auth[2] || '';
-
-			// destroy helper DOM element
-			link = null; delete link;
 
 			parseQs( self);
 		},
@@ -101,9 +100,9 @@
 			var qs = self.query;
 
 			self.query = new (function( qs) {
-				var re = /([^=&]+)(=([^&]*))?/g;
+				var re = /([^=&]+)(=([^&]*))?/g, match;
 
-				while (match = re.exec( qs)) {
+				while ((match = re.exec( qs))) {
 					var
 						key = decodeURIComponent(match[1].replace(/\+/g, ' ')),
 						value = match[3] ? decode(match[3]) : ''
