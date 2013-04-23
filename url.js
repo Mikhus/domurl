@@ -108,7 +108,7 @@
 						value = match[3] ? decode(match[3]) : ''
 					;
 
-					if (this[key]) {
+					if (this[key] !== undefined) {
 						if (!(this[key] instanceof Array)) {
 							this[key] = [this[key]];
 						}
