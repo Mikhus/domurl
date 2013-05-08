@@ -22,6 +22,19 @@
 			hash     : 'hash'
 		},
 
+		/**
+		 * default ports as defined by http://url.spec.whatwg.org/#default-port
+		 * We need them to fix IE behavior, @see https://github.com/Mikhus/jsurl/issues/2
+		 */
+		defaultPorts = {
+			"ftp"    : 21,
+			"gopher" : 70,
+			"http"   : 80,
+			"https"  : 443,
+			"ws"     : 80,
+			"wss"    : 443
+		},
+
 		parse = function( self, url) {
 			var
 				d      = document,
@@ -42,6 +55,30 @@
 			self.hash     = self.hash.replace( /^#/, '');
 			self.user     = auth[1] || '';
 			self.pass     = auth[2] || '';
+			self.port     = (defaultPorts[self.protocol] == self.port) ? '' : self.port; // IE fix
+
+			if (!self.protocol && !/^([a-z]+:)?\/\//.test( url)) { // is IE and path is relative
+				var
+					base     = new Url( d.location.href.match(/(.*\/)/)[0]),
+					basePath = base.path.split( '/'),
+					selfPath = self.path.split( '/')
+				;
+
+				self.protocol = base.protocol;
+				self.port     = base.port;
+
+				while (selfPath[0] == '..') { // skip all "../
+					basePath.pop();
+					selfPath.shift();
+				}
+
+				self.path = basePath.join( '/') + '/' + selfPath.join( '/');
+			}
+
+			else {
+				// fix absolute URL's path in IE
+				self.path = self.path.replace( /^\/?/, '/');
+			}
 
 			parseQs( self);
 		},

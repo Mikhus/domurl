@@ -1,7 +1,7 @@
 jsurl
 =====
 
-Lightweight URL manipulation with JavaScript. Minified and gzipped < 1KB
+Lightweight URL manipulation with JavaScript. Minified and gzipped 1.34KB
 
 Goal
 ====
@@ -13,6 +13,21 @@ parts.
 There is no easy standard way to do it in JavaScript.
 
 This small library intended to fix that problem
+
+Supported Browsers
+==================
+This library was tested under:
+ - IE 9
+ - Chrome 25, 26
+ - Opera 12.15
+ - Firefox 20
+
+Theoretically it should work fine with newer or older versions of these browsers, but
+it was not fully tested yet. If you'll find any compatibility issues, please, let me know by
+leaving a bug report here: https://github.com/Mikhus/jsurl/issues
+
+If you have tested it under other browser and found it works fine, please let me know
+by sending your mail at mikhus@gmail.com
 
 How To Use
 ==========
