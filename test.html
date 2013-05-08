@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="https://raw.github.com/Mikhus/jsurl/master/url.min.js"></script>
+	</head>
+	<body>
+		<script>
+			function assertEqual( a, b, name) {
+				if (a == b) {
+					document.write( '<i style="color:green">' + name + " &mdash; Passed</i> ( '" + a + "' == '" + b + "')<br>");
+				}
+
+				else {
+					document.write( '<b style="color:red">' + name + "&mdash; Failed</b>( '" + a + "' != '" + b + "')<br>");
+				}
+			};
+
+			// full URL
+			document.write( "<h4>Testing full URL</h4>");
+			var str = 'wss://user:pass@example.com:9999/some/path.html?foo=bar#anchor';
+			document.write('<p>Source URL = \'' + str + '\'</p>');
+			var u = new Url( str);
+			assertEqual( u.protocol, "wss", "Parse protocol");
+			assertEqual( u.user, "user", "Parse user");
+			assertEqual( u.pass, "pass", "Parse password");
+			assertEqual( u.host, "example.com", "Parse host");
+			assertEqual( u.port, "9999", "Parse port");
+			assertEqual( u.path, "/some/path.html", "Parse path");
+			assertEqual( u.query, "foo=bar", "Parse query");
+			assertEqual( u.query.foo, "bar", "Parse query param");
+			assertEqual( u.hash, "anchor", "Parse anchor");
+			assertEqual( str, u.toString(), "Stringify URL");
+
+			// relative-absolute URL
+			document.write("<h4>Testing relative-absolute URL</h4>");
+			var str = '/some/path.html?foo=bar#anchor';
+			document.write('<p>Source URL = \'' + str + '\'</p>');
+			var u = new Url( str), du = new Url( document.location.href);
+			assertEqual( u.protocol, du.protocol, "Parse protocol");
+			assertEqual( u.user, du.user, "Parse user");
+			assertEqual( u.pass, du.pass, "Parse password");
+			assertEqual( u.host, du.host, "Parse host");
+			assertEqual( u.port, du.port, "Parse port");
+			assertEqual( u.path, "/some/path.html", "Parse path");
+			assertEqual( u.query, "foo=bar", "Parse query");
+			assertEqual( u.query.foo, "bar", "Parse query param");
+			assertEqual( u.hash, "anchor", "Parse anchor");
+			assertEqual( 
+				(du.protocol && (du.protocol + '://')) +
+				(du.user && (du.user + (du.pass && (':' + du.pass)) + '@')) +
+				(du.host && du.host) +
+				(du.port && (':' + du.port)) + str,
+
+				u.toString(), "Stringify URL"
+			);
+
+			// relative URL
+			document.write( "<h4>Testing relative URL</h4>");
+			var str = 'some/path.html?foo=bar#anchor';
+			document.write('<p>Source URL = \'' + str + '\'</p>');
+			var base = document.location.href.match(/(.*\/)/)[0];
+			var u = new Url( str), du = new Url( document.location.href);
+			assertEqual( u.protocol, du.protocol, "Parse protocol");
+			assertEqual( u.user, du.user, "Parse user");
+			assertEqual( u.pass, du.pass, "Parse password");
+			assertEqual( u.host, du.host, "Parse host");
+			assertEqual( u.port, du.port, "Parse port");
+			assertEqual( u.path, base.replace( /.*?\/\/.*?\//, '/') + "some/path.html", "Parse path");
+			assertEqual( u.query, "foo=bar", "Parse query");
+			assertEqual( u.query.foo, "bar", "Parse query param");
+			assertEqual( u.hash, "anchor", "Parse anchor");
+			assertEqual(
+				base + str,
+				u.toString(), "Stringify URL"
+			);
+
+			// relative URL with upwards
+			var dirlen = document.location.href.match(/(.*\/)/)[0].replace( /.*?\/\/.*?\//, '/').split( '/').length - 2;
+			document.write( "<h4>Testing relative URL with upwards in path</h4>");
+			var str = '../some/path.html?foo=bar#anchor';
+			document.write('<p>Source URL = \'' + str + '\'</p>');
+			var base = document.location.href.match(/(.*\/)/)[0].replace( /[^/]+?\/$/, '');
+			var u = new Url( str), du = new Url( document.location.href);
+			assertEqual( u.protocol, du.protocol, "Parse protocol");
+			assertEqual( u.user, du.user, "Parse user");
+			assertEqual( u.pass, du.pass, "Parse password");
+			assertEqual( u.host, du.host, "Parse host");
+			assertEqual( u.port, du.port, "Parse port");
+			assertEqual( u.path, base.replace( /.*?\/\/(.*?\/)?/, '/') + "some/path.html", "Parse path");
+			assertEqual( u.query, "foo=bar", "Parse query");
+			assertEqual( u.query.foo, "bar", "Parse query param");
+			assertEqual( u.hash, "anchor", "Parse anchor");
+			assertEqual(
+				base + (!dirlen ? document.location.hostname + '/' : '') + 'some/path.html?foo=bar#anchor',
+				u.toString(), "Stringify URL"
+			);
+
+			// relative URL with upwards out of base path
+			var dirlen = document.location.href.match(/(.*\/)/)[0].replace( /.*?\/\/.*?\//, '/').split( '/').length + 1;
+			document.write( "<h4>Testing relative URL with upwards out of base path</h4>");
+			var str = (new Array( dirlen).join( "../")) + 'some/path.html?foo=bar#anchor';
+			document.write('<p>Source URL = \'' + str + '\'</p>');
+			var base = document.location.href.match(/(.*\/)/)[0].replace( /([^/]+?\/){0,20}$/, '').replace( /\/\/\//, '//');
+			var u = new Url( str), du = new Url( document.location.href);
+			assertEqual( u.protocol, du.protocol, "Parse protocol");
+			assertEqual( u.user, du.user, "Parse user");
+			assertEqual( u.pass, du.pass, "Parse password");
+			assertEqual( u.host, du.host, "Parse host");
+			assertEqual( u.port, du.port, "Parse port");
+			assertEqual( u.path, base.replace( /.*?\/\/(.*?\/)?/, '/') + "some/path.html", "Parse path");
+			assertEqual( u.query, "foo=bar", "Parse query");
+			assertEqual( u.query.foo, "bar", "Parse query param");
+			assertEqual( u.hash, "anchor", "Parse anchor");
+			assertEqual( 
+				base + document.location.hostname + '/' + 'some/path.html?foo=bar#anchor',
+				u.toString(), "Stringify URL"
+			);
+		</script>
+	</body>
+</html>
