@@ -28,7 +28,7 @@ it was not fully tested yet. If you'll find any compatibility issues, please, le
 leaving a bug report here: https://github.com/Mikhus/jsurl/issues
 
 You can run basic tests for your browser here: http://smart-ip.net/jsurl/test.html or
-run test.html from this repository locally. If any tests has not been passed, please,
+run test.html from this repository locally. If any test has not been passed, please,
 open an bug report as described above.
 
 How To Use
