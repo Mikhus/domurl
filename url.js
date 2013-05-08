@@ -64,6 +64,8 @@
 					selfPath = self.path.split( '/')
 				;
 
+				basePath.pop();
+
 				self.protocol = base.protocol;
 				self.port     = base.port;
 
