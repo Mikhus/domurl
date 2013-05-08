@@ -17,7 +17,7 @@ This small library intended to fix that problem
 Supported Browsers
 ==================
 This library was tested under:
- - IE 6,7,8,9,10
+ - IE 7,8,9,10
  - Chrome 25, 26
  - Opera 12.15
  - Firefox 20
