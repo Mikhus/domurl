@@ -17,7 +17,7 @@ This small library intended to fix that problem
 Supported Browsers
 ==================
 This library was tested under:
- - IE 9
+ - IE 6,7,8,9,10
  - Chrome 25, 26
  - Opera 12.15
  - Firefox 20
@@ -26,8 +26,9 @@ Theoretically it should work fine with newer or older versions of these browsers
 it was not fully tested yet. If you'll find any compatibility issues, please, let me know by
 leaving a bug report here: https://github.com/Mikhus/jsurl/issues
 
-If you have tested it under other browser and found it works fine, please let me know
-by sending your mail at mikhus@gmail.com
+You can run basic tests for your browser here: http://smart-ip.net/jsurl/test.html or
+run test.html from this repository locally. If any tests has not been passed, please,
+open an bug report as described above.
 
 How To Use
 ==========

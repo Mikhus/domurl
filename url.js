@@ -66,15 +66,16 @@
 
 				basePath.pop();
 
-				self.protocol = base.protocol;
-				self.port     = base.port;
+				for (var i = 0, props = ['protocol','user','pass','host','port'], s = props.length; i < s; i++) {
+					self[props[i]] = base[props[i]];
+				}
 
 				while (selfPath[0] == '..') { // skip all "../
 					basePath.pop();
 					selfPath.shift();
 				}
 
-				self.path = basePath.join( '/') + '/' + selfPath.join( '/');
+				self.path = (url.substring(0, 1) != '/' ? basePath.join( '/') : '') + '/' + selfPath.join( '/');
 			}
 
 			else {
