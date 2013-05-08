@@ -29,7 +29,8 @@ leaving a bug report here: https://github.com/Mikhus/jsurl/issues
 
 You can run basic tests for your browser here: http://smart-ip.net/jsurl/test.html or
 run test.html from this repository locally. If any test has not been passed, please,
-open an bug report as described above.
+open an bug report as described above providing browser and OS version on each the test
+has been failed.
 
 How To Use
 ==========
