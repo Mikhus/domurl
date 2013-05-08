@@ -55,7 +55,7 @@
 			self.hash     = self.hash.replace( /^#/, '');
 			self.user     = auth[1] || '';
 			self.pass     = auth[2] || '';
-			self.port     = (defaultPorts[self.protocol] == self.port) ? '' : self.port; // IE fix
+			self.port     = (defaultPorts[self.protocol] == self.port || self.port == 0) ? '' : self.port; // IE fix, Android browser fix
 
 			if (!self.protocol && !/^([a-z]+:)?\/\//.test( url)) { // is IE and path is relative
 				var
