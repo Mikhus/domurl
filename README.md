@@ -21,7 +21,7 @@ This library was tested under:
  - Chrome 25, 26
  - Opera 12.15
  - Firefox 20
- - Android browser 2.3.5
+ - Android browser 2.3.5, 4.1.3
 
 Theoretically it should work fine with newer or older versions of these browsers, but
 it was not fully tested yet. If you'll find any compatibility issues, please, let me know by
