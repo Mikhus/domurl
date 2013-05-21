@@ -166,37 +166,37 @@
 						s = '',
 						e = encodeURIComponent
 					;
-	
+
 					for (var i in this) {
 						if (this[i] instanceof Function) {
 							continue;
 						}
-	
+
 						if (this[i] instanceof Array) {
 							var len = this[i].length;
-	
+
 							if (len) {
 								for (var ii = 0; ii < len; ii++) {
 									s += s ? '&' : '';
 									s += e( i) + '=' + e( this[i][ii]);
 								}
 							}
-	
+
 							else { // parameter is an empty array, so treat as an empty argument
 								s += (s ? '&' : '') + e( i) + '=';
 							}
 						}
-	
+
 						else {
 							s += s ? '&' : '';
 							s += e( i) + '=' + e( this[i]);
 						}
 					}
-	
+
 					return s;
 				};
 			})( qs);
-		}		
+		}
 	;
 
 	return function( url) {
