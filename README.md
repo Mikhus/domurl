@@ -37,7 +37,7 @@ How To Use
 
 First of all it is required to include Url class on the page. It can be simply done as
 
-    <script src="https://raw.github.com/Mikhus/jsurl/master/url.min.js"></script>
+    <script src="url.min.js"></script>
 
 Then any time it's required to do some work over the URL string, it's just required to
 instantiate the Url object and work with that object instead of initial string. See API
