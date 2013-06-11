@@ -115,6 +115,12 @@
 				base + document.location.hostname + '/' + 'some/path.html?foo=bar#anchor',
 				u.toString(), "Stringify URL"
 			);
+			
+			// clear query
+			var url = new Url( 'http://example.com/?a=b=c=d=e=f=g=h#foo');
+			document.write( "<h4>Testing query cleanup function</h4>");
+			url.query.clear();
+			assertEqual( 'http://example.com/#foo', url.toString(), "query.clear()");
 		</script>
 	</body>
 </html>

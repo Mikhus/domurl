@@ -130,6 +130,10 @@ var a = document.createElement('a');
 a.href = u;
 a.innerHTML = 'test';
 document.body.appendChild( a)
+
+// If you need to remove all query string params:
+u.query.clear();
+alert( u);
 ```
 
 License

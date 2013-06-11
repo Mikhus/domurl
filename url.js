@@ -161,6 +161,14 @@
 					}
 				}
 
+				this.clear = function() {
+					for (key in this) {
+						if (!(this[key] instanceof Function)) {
+							delete this[key];
+						}
+					}
+				};
+
 				this.toString = function() {
 					var
 						s = '',
