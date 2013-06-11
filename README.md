@@ -109,7 +109,6 @@ alert(
     'hash = ' + u.hash
 );
 
-
 if (u.query.a instanceof Array) { // the way to add a parameter
   u.query.a.push(4); // now it's "a=1&a=2&a=3&a=4&b=woohoo"
 }
@@ -118,6 +117,15 @@ else { // if not an array but scalar value here is a way how to convert to array
   u.query.a = [u.query.a];
   u.query.a.push(8)
 }
+
+// The way to remove the parameter:
+delete u.query.a
+// or:
+delete u.query["a"]
+
+// If you need to remove all query string params:
+u.query.clear();
+alert( u);
 
 u.path = '/some/new/path'; // the way to change URL path
 u.protocol = 'https' // the way to force https protocol on the source URL
@@ -130,10 +138,6 @@ var a = document.createElement('a');
 a.href = u;
 a.innerHTML = 'test';
 document.body.appendChild( a)
-
-// If you need to remove all query string params:
-u.query.clear();
-alert( u);
 ```
 
 License
