@@ -89,7 +89,7 @@
 		decode = function(s) {
 			s = s.replace( /\+/g, ' ');
 
-			s = s.replace( /%([EF][0-9A-F])%([89AB][0-9A-F])%([89AB][0-9A-F])/g,
+			s = s.replace( /%([ef][0-9a-f])%([89ab][0-9a-f])%([89ab][0-9a-f])/gi,
 				function( code, hex1, hex2, hex3) {
 					var
 						n1 = parseInt( hex1, 16) - 0xE0,
@@ -113,7 +113,7 @@
 				}
 			);
 
-			s = s.replace( /%([CD][0-9A-F])%([89AB][0-9A-F])/g,
+			s = s.replace( /%([cd][0-9a-f])%([89ab][0-9a-f])/gi,
 				function( code, hex1, hex2) {
 					var n1 = parseInt(hex1, 16) - 0xC0;
 	
@@ -127,7 +127,7 @@
 				}
 			);
 
-			s = s.replace( /%([0-7][0-9A-F])/g,
+			s = s.replace( /%([0-7][0-9a-f])/gi,
 				function( code, hex) {
 					return String.fromCharCode( parseInt(hex, 16));
 				}
