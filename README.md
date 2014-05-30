@@ -51,6 +51,14 @@ Could be simply done as:
 
     $ jam install jsurl
 
+Install with Bower
+==================
+
+It is also possible now to install jsurl using Bower package repository.
+Could be done simply as:
+
+    $ bower install jsurl
+
 API
 ===
 
