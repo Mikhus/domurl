@@ -1,0 +1,10 @@
+{
+    "name": "jsurl",
+    "version": "1.2.1",
+    "ignore": [
+        "test.html",
+        "bower.json",
+        "package.json",
+        "README.md"
+    ]
+}
