@@ -180,7 +180,7 @@
 				};
 				
 				this.isEmpty = function() {
-					return this.count == 0;	
+					return this.count() === 0;	
 				};
 
 				this.toString = function() {
