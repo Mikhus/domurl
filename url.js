@@ -168,6 +168,20 @@
 						}
 					}
 				};
+				
+				this.count = function() {
+					var count = 0;
+					for (key in this) {
+						if (!(this[key] instanceof Function)) {
+							count++;
+						}
+					}
+					return count;
+				};
+				
+				this.isEmpty = function() {
+					return this.count() === 0;	
+				};
 
 				this.toString = function() {
 					var
