@@ -1,6 +1,7 @@
 {
     "name": "jsurl",
     "version": "1.2.2",
+    "main": "url.js",
     "ignore": [
         ".project",
         "test.html",
