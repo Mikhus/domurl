@@ -7,6 +7,8 @@
         "test.html",
         "bower.json",
         "package.json",
-        "README.md"
+        "README.md",
+        ".idea",
+        ".gitignore"
     ]
 }
