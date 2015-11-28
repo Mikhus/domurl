@@ -112,7 +112,7 @@
 			assertEqual( u.query.foo, "bar", "Parse query param");
 			assertEqual( u.hash, "anchor", "Parse anchor");
 			assertEqual( 
-				base + document.location.hostname + '/' + 'some/path.html?foo=bar#anchor',
+				base + document.location.host + '/' + 'some/path.html?foo=bar#anchor',
 				u.toString(), "Stringify URL"
 			);
 			
