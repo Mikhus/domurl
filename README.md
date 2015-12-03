@@ -64,12 +64,16 @@ API
 
 Methods:
 
-*Url( strURL)*
+*Url({string} url)*
 Constructor. If strURL is not passed curent document URL will be used.
 
-*toString()*
+*toString() -> {string}*
 Converts URL to string representation. As far as it's spesial method, any time string
 operations is performed over Url objects this method is automatically called
+
+*paths({Array} [pathStrings])*
+Returns Url.path representation as array or sets it via array representation
+if optional array of pathStrings was provided.
 
 Properties:
 
@@ -143,6 +147,9 @@ alert(
 
 // Manipulating URL parts
 u.path = '/some/new/path'; // the way to change URL path
+console.log(u.paths());
+u.paths(['some', 'new', 'path']); // change path by array of strings
+console.log(u.path);
 u.protocol = 'https' // the way to force https protocol on the source URL
 
 // inject into string
