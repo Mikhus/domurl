@@ -263,6 +263,9 @@
 			return paths;
 		},
 
+		this.encode = encode,
+		this.decode = decode,
+
 		this.isAbsolute = function() {
 			return this.protocol || this.path.charAt(0) === '/';
 		},

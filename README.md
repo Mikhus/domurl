@@ -1,10 +1,8 @@
-jsurl
-=====
+# jsurl
 
 Lightweight URL manipulation with JavaScript. Minified and gzipped 1.4KB
 
-Goal
-====
+## Goal
 
 To have a convenient way working with URLs in JavaScript. From time to time there are usual tasks 
 when it is required to add or remove some parameters to some basic URL or change some other URL
@@ -14,8 +12,8 @@ There is no easy standard way to do it in JavaScript.
 
 This small library intended to fix that problem
 
-Supported Browsers
-==================
+## Supported Browsers
+
 This library was tested under:
  - IE 7,8,9,10
  - Chrome 25, 26
@@ -32,8 +30,7 @@ run test.html from this repository locally. If any test has not been passed, ple
 open a bug report as described above providing browser and OS version on each test
 which has been failed.
 
-How To Use
-==========
+## How To Use
 
 First of all it is required to include Url class on the page. It can be simply done as
 
@@ -43,60 +40,69 @@ Then any time it's required to do some work over the URL string, it's just requi
 instantiate the Url object and work with that object instead of initial string. See API
 description below to get a clue.
 
-Install with JAM
-================
+## Install with JAM
 
 It is possible also to install jsurl via JAM repository (http://jamjs.org/).
 Could be simply done as:
 
     $ jam install jsurl
 
-Install with Bower
-==================
+## Install with Bower
 
 It is also possible now to install jsurl using Bower package repository.
 Could be done simply as:
 
     $ bower install jsurl
 
-API
-===
+## API
 
-Methods:
+### Methods:
 
-*Url({string} url)*
-Constructor. If strURL is not passed curent document URL will be used.
+**Url({string} url) -> {Url}**
 
-*toString() -> {string}*
+Constructor. If url argument is not passed, current document URL will be used.
+
+**Url.toString() -> {string}**
+
 Converts URL to string representation. As far as it's spesial method, any time string
 operations is performed over Url objects this method is automatically called
 
-*paths({Array} [pathStrings])*
+**Url.paths({Array} [pathStrings])**
+
 Returns Url.path representation as array or sets it via array representation
 if optional array of pathStrings was provided.
 
-Properties:
+**Url.encode({string} urlPart) -> {string}**
 
-*protocol* - protocol part of URL, everything between the beginning of the URL string 
+Performs URI-compatible encoding of the given urlPart component. It works **not**
+the same as native encodeURIComponent()!
+
+**Url.decode({string} encUrlPart) -> {string}**
+
+Performs decoding of URI-encoded component. It works **not** the same as native
+decodeURIComponent()!
+
+### Properties:
+
+**Url.protocol** - protocol part of URL, everything between the beginning of the URL string 
 and "://" delimiter (if specified)
 
-*user* - auth user name (if specified)
+**Url.user** - auth user name (if specified)
 
-*pass* - auth user password (if specified)
+**Url.pass** - auth user password (if specified)
 
-*host* - host name (if specified)
+**Url.host** - host name (if specified)
 
-*port* - port number (if specified)
+**Url.port** - port number (if specified)
 
-*path* - document path
+**Url.path** - document path
 
-*query* - QueryString object. It's a simple Javascript object with automatic string
+**Url.query** - QueryString object. It's a simple Javascript object with automatic string
 mapping. String representation contains everything after "?" and to the end of QueryString
 
-*hash* - Anchor part of the URL. Everything after "#" and to the end of anchor
+**Url.hash** - Anchor part of the URL. Everything after "#" and to the end of anchor
 
-Usage Examples
-==============
+## Usage Examples
 
 ```javascript
 var u  = new Url; // curent document URL will be used
@@ -122,7 +128,6 @@ else { // if not an array but scalar value here is a way how to convert to array
   u.query.a = [u.query.a];
   u.query.a.push(8)
 }
-
 
 // The way to remove the parameter:
 delete u.query.a
@@ -169,7 +174,6 @@ u.toString();
 //       cases direct stringify is required
 ```
 
-License
-=======
+## License
 
 This code is available under MIT license. Feel free to do what you want.
