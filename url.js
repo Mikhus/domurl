@@ -83,6 +83,8 @@
 				self.path = self.path.replace( /^\/?/, '/');
 			}
 
+			self.pathArray = self.path.slice(1).split('/');
+
 			parseQs( self);
 		},
 		
