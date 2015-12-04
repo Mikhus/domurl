@@ -2,6 +2,8 @@
 
 Lightweight URL manipulation with JavaScript. Minified and gzipped 1.4KB
 
+**NOTE: DO NOT USE VERSIONS 1.2.4-1.2.6 - THEY DO HAVE OUTDATED url.min.js!!!**
+
 ## Goal
 
 To have a convenient way working with URLs in JavaScript. From time to time there are usual tasks 
