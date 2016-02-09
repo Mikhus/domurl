@@ -1,289 +1,351 @@
 /*!
  * Lightweight URL manipulation with JavaScript
- * This library is independent of any other libraries and has pretty simple interface
- * and lightweight code-base.
+ * This library is independent of any other libraries and has pretty simple
+ * interface and lightweight code-base.
  * Some ideas of query string parsing had been taken from Jan Wolter
  * @see http://unixpapa.com/js/querystring.html
- * 
+ *
  * @license MIT
  * @author Mykhailo Stadnyk <mikhus@gmail.com>
  */
-; var Url = (function() {
-	"use strict";
+/* jshint ignore:start */
+; var Url = (function () {
+/* jshint ignore:end */
+    'use strict';
 
-	var
-		// mapping between what we want and <a> element properties
-		map = {
-			protocol : 'protocol',
-			host     : 'hostname',
-			port     : 'port',
-			path     : 'pathname',
-			query    : 'search',
-			hash     : 'hash'
-		},
+    // mapping between what we want and <a> element properties
+    var map = {
+        protocol: 'protocol',
+        host: 'hostname',
+        port: 'port',
+        path: 'pathname',
+        query: 'search',
+        hash: 'hash'
+    };
 
-		/**
-		 * default ports as defined by http://url.spec.whatwg.org/#default-port
-		 * We need them to fix IE behavior, @see https://github.com/Mikhus/jsurl/issues/2
-		 */
-		defaultPorts = {
-			"ftp"    : 21,
-			"gopher" : 70,
-			"http"   : 80,
-			"https"  : 443,
-			"ws"     : 80,
-			"wss"    : 443
-		},
+    // jscs: disable
+    /**
+     * default ports as defined by http://url.spec.whatwg.org/#default-port
+     * We need them to fix IE behavior, @see https://github.com/Mikhus/jsurl/issues/2
+     */
+    // jscs: enable
+    var defaultPorts = {
+        ftp: 21,
+        gopher: 70,
+        http: 80,
+        https: 443,
+        ws: 80,
+        wss: 443
+    };
 
-		parse = function( self, url) {
-			var
-				d      = document,
-				link   = d.createElement( 'a'),
-				url    = url || d.location.href,
-				auth   = url.match( /\/\/(.*?)(?::(.*?))?@/) || [],
-				i
-			;
+    function parse (self, url) {
+        url = url || document.location.href;
 
-			link.href = url;
+        var link = document.createElement('a');
+        var auth = url.match(/\/\/(.*?)(?::(.*?))?@/) || [];
+        var i;
 
-			for (i in map) {
-				self[i] = link[map[i]] || '';
-			}
+        link.href = url;
 
-			// fix-up some parts
-			self.protocol = self.protocol.replace( /:$/, '');
-			self.query    = self.query.replace( /^\?/, '');
-			self.hash     = decode(self.hash.replace( /^#/, ''));
-			self.user     = decode(auth[1] || '');
-			self.pass     = decode(auth[2] || '');
-			self.port     = (
-				defaultPorts[self.protocol] == self.port || self.port == 0
-			) ? '' : self.port; // IE fix, Android browser fix
+        for (i in map) {
+            self[i] = link[map[i]] || '';
+        }
 
-			if (!self.protocol && !/^([a-z]+:)?\/\//.test( url)) {
-				// is IE and path is relative
-				var
-					base     = new Url( d.location.href.match(/(.*\/)/)[0]),
-					basePath = base.path.split( '/'),
-					selfPath = self.path.split( '/'),
-					props = ['protocol','user','pass','host','port'],
-					s = props.length
-				;
+        // fix-up some parts
+        self.protocol = self.protocol.replace(/:$/, '');
+        self.query = self.query.replace(/^\?/, '');
+        self.hash = decode(self.hash.replace(/^#/, ''));
+        self.user = decode(auth[1] || '');
+        self.pass = decode(auth[2] || '');
+        self.port = (
+            defaultPorts[self.protocol] === self.port || self.port === 0
+        ) ? '' : self.port; // IE fix, Android browser fix
 
-				basePath.pop();
+        if (!self.protocol && !/^([a-z]+:)?\/\//.test(url)) {
+            // is IE and path is relative
+            var base = new Url(d.location.href.match(/(.*\/)/)[0]);
+            var basePath = base.path.split('/');
+            var selfPath = self.path.split('/');
+            var props = ['protocol', 'user', 'pass', 'host', 'port'];
+            var s = props.length;
 
-				for (i = 0; i < s; i++) {
-					self[props[i]] = base[props[i]];
-				}
+            basePath.pop();
 
-				while (selfPath[0] == '..') { // skip all "../
-					basePath.pop();
-					selfPath.shift();
-				}
+            for (i = 0; i < s; i++) {
+                self[props[i]] = base[props[i]];
+            }
 
-				self.path =
-					(url.charAt(0) != '/' ? basePath.join( '/') : '') +
-					'/' + selfPath.join( '/')
-				;
-			}
+            while (selfPath[0] == '..') { // skip all "../
+                basePath.pop();
+                selfPath.shift();
+            }
 
-			else {
-				// fix absolute URL's path in IE
-				self.path = self.path.replace( /^\/?/, '/');
-			}
+            self.path =
+                (url.charAt(0) != '/' ? basePath.join('/') : '') +
+                '/' + selfPath.join('/')
+            ;
+        }
 
-			self.paths((self.path.charAt(0) == '/' ?
-				self.path.slice(1) : self.path).split('/')
-			);
+        else {
+            // fix absolute URL's path in IE
+            self.path = self.path.replace(/^\/?/, '/');
+        }
 
-			parseQs( self);
-		},
+        self.paths((self.path.charAt(0) == '/' ?
+            self.path.slice(1) : self.path).split('/')
+        );
 
-		encode = function(s) {
-			return encodeURIComponent(s).replace(/'/g, '%27');
-		},
+        self.query = new QueryString(self.query);
+    }
 
-		decode = function(s) {
-			s = s.replace( /\+/g, ' ');
+    function encode (s) {
+        return encodeURIComponent(s).replace(/'/g, '%27');
+    }
 
-			s = s.replace(/%([ef][0-9a-f])%([89ab][0-9a-f])%([89ab][0-9a-f])/gi,
-				function( code, hex1, hex2, hex3) {
-					var
-						n1 = parseInt( hex1, 16) - 0xE0,
-						n2 = parseInt( hex2, 16) - 0x80
-					;
+    function decode (s) {
+        s = s.replace(/\+/g, ' ');
 
-					if (n1 == 0 && n2 < 32) {
-						return code;
-					}
+        s = s.replace(/%([ef][0-9a-f])%([89ab][0-9a-f])%([89ab][0-9a-f])/gi,
+            function (code, hex1, hex2, hex3) {
+                var n1 = parseInt(hex1, 16) - 0xE0;
+                var n2 = parseInt(hex2, 16) - 0x80;
 
-					var
-						n3 = parseInt( hex3, 16) - 0x80,
-						n = (n1 << 12) + (n2 << 6) + n3
-					;
+                if (n1 === 0 && n2 < 32) {
+                    return code;
+                }
 
-					if (n > 0xFFFF) {
-						return code;
-					}
+                var n3 = parseInt(hex3, 16) - 0x80;
+                var n = (n1 << 12) + (n2 << 6) + n3;
 
-					return String.fromCharCode( n);
-				}
-			);
+                if (n > 0xFFFF) {
+                    return code;
+                }
 
-			s = s.replace( /%([cd][0-9a-f])%([89ab][0-9a-f])/gi,
-				function( code, hex1, hex2) {
-					var n1 = parseInt(hex1, 16) - 0xC0;
-	
-					if (n1 < 2) {
-						return code;
-					}
-	
-					var n2 = parseInt(hex2, 16) - 0x80;
-	
-					return String.fromCharCode( (n1 << 6) + n2);
-				}
-			);
+                return String.fromCharCode(n);
+            }
+        );
 
-			s = s.replace( /%([0-7][0-9a-f])/gi,
-				function( code, hex) {
-					return String.fromCharCode( parseInt(hex, 16));
-				}
-			);
+        s = s.replace(/%([cd][0-9a-f])%([89ab][0-9a-f])/gi,
+            function (code, hex1, hex2) {
+                var n1 = parseInt(hex1, 16) - 0xC0;
 
-			return s;
-		},
+                if (n1 < 2) {
+                    return code;
+                }
 
-		parseQs = function( self) {
-			var qs = self.query;
+                var n2 = parseInt(hex2, 16) - 0x80;
 
-			self.query = new (function( qs) {
-				var re = /([^=&]+)(=([^&]*))?/g, match;
+                return String.fromCharCode((n1 << 6) + n2);
+            }
+        );
 
-				while ((match = re.exec( qs))) {
-					var
-						key = decodeURIComponent(match[1].replace(/\+/g, ' ')),
-						value = match[3] ? decode(match[3]) : ''
-					;
+        return s.replace(/%([0-7][0-9a-f])/gi,
+            function (code, hex) {
+                return String.fromCharCode(parseInt(hex, 16));
+            }
+        );
+    }
 
-					if (this[key] != null) {
-						if (!(this[key] instanceof Array)) {
-							this[key] = [this[key]];
-						}
+    /**
+     * Class QueryString
+     *
+     * @param {string} qs - string representation of QueryString
+     * @constructor
+     */
+    function QueryString (qs) {
+        var re = /([^=&]+)(=([^&]*))?/g;
+        var match;
 
-						this[key].push( value);
-					}
+        while ((match = re.exec(qs))) {
+            var key = decodeURIComponent(match[1].replace(/\+/g, ' '));
+            var value = match[3] ? decode(match[3]) : '';
 
-					else {
-						this[key] = value;
-					}
-				}
+            if (!(this[key] === undefined || this[key] === null)) {
+                if (!(this[key] instanceof Array)) {
+                    this[key] = [this[key]];
+                }
 
-				this.clear = function() {
-					for (var key in this) {
-						if (!(this[key] instanceof Function)) {
-							delete this[key];
-						}
-					}
-				};
+                this[key].push(value);
+            }
 
-				this.count = function() {
-					var count = 0, key;
-					for (key in this) {
-						if (!(this[key] instanceof Function)) {
-							count++;
-						}
-					}
-					return count;
-				};
+            else {
+                this[key] = value;
+            }
+        }
+    }
 
-				this.isEmpty = function() {
-					return this.count() === 0;	
-				};
+    /**
+     * Converts QueryString object back to string representation
+     *
+     * @returns {string}
+     */
+    QueryString.prototype.toString = function () {
+        var s = '';
+        var e = encode;
+        var i, ii;
 
-				this.toString = function() {
-					var s = '', e = encode, i, ii;
+        for (i in this) {
+            if (this[i] instanceof Function || this[i] === null) {
+                continue;
+            }
 
-					for (i in this) {
-						if (this[i] instanceof Function) {
-							continue;
-						}
+            if (this[i] instanceof Array) {
+                var len = this[i].length;
 
-						if (this[i] instanceof Array) {
-							var len = this[i].length;
+                if (len) {
+                    for (ii = 0; ii < len; ii++) {
+                        s += s ? '&' : '';
+                        s += e(i) + '=' + e(this[i][ii]);
+                    }
+                }
 
-							if (len) {
-								for (ii = 0; ii < len; ii++) {
-									s += s ? '&' : '';
-									s += e( i) + '=' + e( this[i][ii]);
-								}
-							}
+                else {
+                    // parameter is an empty array, so treat as
+                    // an empty argument
+                    s += (s ? '&' : '') + e(i) + '=';
+                }
+            }
 
-							else {
-								// parameter is an empty array, so treat as
-								// an empty argument
-								s += (s ? '&' : '') + e( i) + '=';
-							}
-						}
+            else {
+                s += s ? '&' : '';
+                s += e(i) + '=' + e(this[i]);
+            }
+        }
 
-						else {
-							s += s ? '&' : '';
-							s += e( i) + '=' + e( this[i]);
-						}
-					}
+        return s;
+    };
 
-					return s;
-				};
-			})( qs);
-		}
-	;
+    /**
+     * Class Url
+     *
+     * @param {string} [url] - string URL representation
+     * @constructor
+     */
+    function Url (url) {
+        parse(this, url);
+    }
 
-	return function( url) {
-		this.paths = function( paths) {
-			var prefix = '', i = 0, s;
+    /**
+     * Clears QueryString, making it contain no params at all
+     *
+     * @returns {Url}
+     */
+    Url.prototype.clearQuery = function () {
+        for (var key in this.query) {
+            if (!(this.query[key] instanceof Function)) {
+                delete this.query[key];
+            }
+        }
 
-			if (paths && paths.length && paths + '' !== paths) {
-				if (this.isAbsolute()) {
-					prefix = '/';
-				}
+        return this;
+    };
 
-				for (s = paths.length; i < s; i++) {
-					paths[i] = encode(paths[i]);
-				}
+    /**
+     * Returns total number of parameters in QueryString
+     *
+     * @returns {number}
+     */
+    Url.prototype.queryLength = function () {
+        var count = 0;
+        var key;
 
-				this.path = prefix + paths.join('/');
-			}
+        for (key in this) {
+            if (!(this[key] instanceof Function)) {
+                count++;
+            }
+        }
 
-			paths = (this.path.charAt(0) === '/' ?
-				this.path.slice(1) : this.path).split('/');
+        return count;
+    };
 
-			for (i = 0, s = paths.length; i < s; i++) {
-				paths[i] = decode(paths[i]);
-			}
+    /**
+     * Returns true if QueryString contains no parameters, false otherwise
+     *
+     * @returns {boolean}
+     */
+    Url.prototype.isEmptyQuery = function () {
+        return this.queryLength() === 0;
+    };
 
-			return paths;
-		};
+    /**
+     *
+     * @param {Array} [paths] - an array pf path parts (if given will modify
+     *                          Url.path property
+     * @returns {Array} - an array representation of the Url.path property
+     */
+    Url.prototype.paths = function (paths) {
+        var prefix = '';
+        var i = 0;
+        var s;
 
-		this.encode = encode;
-		this.decode = decode;
+        if (paths && paths.length && paths + '' !== paths) {
+            if (this.isAbsolute()) {
+                prefix = '/';
+            }
 
-		this.isAbsolute = function() {
-			return this.protocol || this.path.charAt(0) === '/';
-		};
+            for (s = paths.length; i < s; i++) {
+                paths[i] = encode(paths[i]);
+            }
 
-		this.toString = function() {
-			return (
-				(this.protocol && (this.protocol + '://')) +
-				(this.user && (
-					encode(this.user) + (this.pass && (':' + encode(this.pass))
-				) + '@')) +
-				(this.host && this.host) +
-				(this.port && (':' + this.port)) +
-				(this.path && this.path) +
-				(this.query.toString() && ('?' + this.query)) +
-				(this.hash && ('#' + encode(this.hash)))
-			);
-		};
+            this.path = prefix + paths.join('/');
+        }
 
-		parse( this, url);
-	};
+        paths = (this.path.charAt(0) === '/' ?
+            this.path.slice(1) : this.path).split('/');
+
+        for (i = 0, s = paths.length; i < s; i++) {
+            paths[i] = decode(paths[i]);
+        }
+
+        return paths;
+    };
+
+    /**
+     * Performs URL-specific encoding of the given string
+     *
+     * @method Url#encode
+     * @param {string} s - string to encode
+     * @returns {string}
+     */
+    Url.prototype.encode = encode;
+
+    /**
+     * Performs URL-specific decoding of the given encoded string
+     *
+     * @method Url#decode
+     * @param {string} s - string to decode
+     * @returns {string}
+     */
+    Url.prototype.decode = decode;
+
+    /**
+     * Checks if current URL is an absolute resource locator (globally absolute
+     * or absolute path to current server)
+     *
+     * @returns {boolean}
+     */
+    Url.prototype.isAbsolute = function () {
+        return this.protocol || this.path.charAt(0) === '/';
+    };
+
+    /**
+     * Returns string representation of current Url object
+     *
+     * @returns {string}
+     */
+    Url.prototype.toString = function () {
+        return (
+            (this.protocol && (this.protocol + '://')) +
+            (this.user && (
+            encode(this.user) + (this.pass && (':' + encode(this.pass))
+            ) + '@')) +
+            (this.host && this.host) +
+            (this.port && (':' + this.port)) +
+            (this.path && this.path) +
+            (this.query.toString() && ('?' + this.query)) +
+            (this.hash && ('#' + encode(this.hash)))
+        );
+    };
+
+    return Url;
 }());

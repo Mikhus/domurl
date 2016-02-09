@@ -1,8 +1,14 @@
-# jsurl
+# jsurl 2.0
 
-Lightweight URL manipulation with JavaScript. Minified and gzipped 1.4KB
+Lightweight URL manipulation with JavaScript.
 
-**NOTE: DO NOT USE VERSIONS 1.2.4-1.2.6 - THEY DO HAVE OUTDATED url.min.js!!!**
+**NOTE: This is major version release which changes API in comparison to version 1.x**
+
+API Changes:
+
+ - Url.query.clear() is moved to Url.clearQuery()
+ - Url.query.count() is moved to Url.queryLength()
+ - Url.query.isEmpty() is moved to Url.isEmptyQuery()
 
 ## Goal
 
@@ -84,6 +90,18 @@ the same as native encodeURIComponent()!
 Performs decoding of URI-encoded component. It works **not** the same as native
 decodeURIComponent()!
 
+**Url.clearQuery() -> {Url}**
+
+Removes all query string parameters from the URL
+
+**Url.queryLength() -> {Number}**
+
+Returns total count of the query string parameters.
+
+**Url.isEmptyQuery() -> {boolean}**
+
+Returns true if query string contains no parameters, false otherwise.
+
 ### Properties:
 
 **Url.protocol** - protocol part of URL, everything between the beginning of the URL string 
@@ -137,7 +155,7 @@ delete u.query.a
 delete u.query["a"]
 
 // If you need to remove all query string params:
-u.query.clear();
+u.clearQuery();
 alert( u);
 
 // Lookup URL parts:

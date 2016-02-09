@@ -117,14 +117,14 @@
 			);
 			
 			// clear query
-			var url = new Url( 'http://example.com/?a=b=c=d=e=f=g=h#foo');
+			var url = new Url( 'http://example.com/?a=&b=&c=&d=&e=&f=&g=&h#foo');
 			document.write( "<h4>Testing query cleanup function</h4>");
-			url.query.clear();
-			assertEqual( 'http://example.com/#foo', url.toString(), "query.clear()");
+			url.clearQuery();
+			assertEqual( 'http://example.com/#foo', url.toString(), "Url.clearQuery()");
 
 			// encode-decode
 			var
-				url1 = new Url('http://localhost/?a=%3F').toString()
+				url1 = new Url('http://localhost/?a=%3F').toString(),
 				url2 = new Url('http://localhost/?a=%3f').toString()
 			;
 			document.write( "<h4>Testing case sensitivity in encode-decode</h4>");
