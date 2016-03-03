@@ -64,6 +64,9 @@ Could be done simply as:
     
 ## Install with NPM
 
+Domurl is available on NPM, but, please make sure you understand that it
+is browser-use only library:
+
     $ npm install domurl
 
 ## API
