@@ -13,6 +13,7 @@
       "README.md"
     ]
   },
+  "main": "url.min.js",
   "maintainers": [
     {
       "name": "Mykhailo Stadnyk",
