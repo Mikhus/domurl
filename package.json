@@ -1,12 +1,12 @@
 {
-  "name": "jsurl",
+  "name": "domurl",
   "version": "2.0.0",
   "description": "Lightweight URL manipulation with JavaScript.",
   "homepage": "https://github.com/Mikhus/jsurl",
   "keywords": [ "url", "querystring" ],
   "categories": [ "Utilities" ],
   "jam": {
-    "main": "url.js",
+    "main": "url.min.js",
     "include": [
       "url.js",
       "url.min.js",

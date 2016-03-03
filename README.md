@@ -1,4 +1,4 @@
-# jsurl 2.0
+# domurl 2.0 (former jsurl)
 
 Lightweight URL manipulation with JavaScript.
 
@@ -31,9 +31,9 @@ This library was tested under:
 
 Theoretically it should work fine with newer or older versions of these browsers, but
 it was not fully tested yet. If you'll find any compatibility issues, please, let me know by
-leaving a bug report here: https://github.com/Mikhus/jsurl/issues
+leaving a bug report here: https://github.com/Mikhus/domurl/issues
 
-You can run basic tests for your browser here: http://ru.smart-ip.net/jsurl/test.html or
+You can run basic tests for your browser here: http://ru.smart-ip.net/domurl/test.html or
 run test.html from this repository locally. If any test has not been passed, please,
 open a bug report as described above providing browser and OS version on each test
 which has been failed.
@@ -50,17 +50,21 @@ description below to get a clue.
 
 ## Install with JAM
 
-It is possible also to install jsurl via JAM repository (http://jamjs.org/).
+It is possible also to install domurl via JAM repository (http://jamjs.org/).
 Could be simply done as:
 
-    $ jam install jsurl
+    $ jam install domurl
 
 ## Install with Bower
 
-It is also possible now to install jsurl using Bower package repository.
+It is also possible now to install domurl using Bower package repository.
 Could be done simply as:
 
-    $ bower install jsurl
+    $ bower install domurl
+    
+## Install with NPM
+
+    $ npm install domurl
 
 ## API
 
