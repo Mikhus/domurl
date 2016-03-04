@@ -9,7 +9,7 @@
  * @author Mykhailo Stadnyk <mikhus@gmail.com>
  */
 /* jshint ignore:start */
-; var Url = (function () {
+(function (ns) {
 /* jshint ignore:end */
     'use strict';
 
@@ -347,5 +347,5 @@
         );
     };
 
-    return Url;
-}());
+    ns.Url = Url;
+}(typeof module !== 'undefined' && module.exports ? module.exports : window));
