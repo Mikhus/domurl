@@ -1,14 +1,6 @@
-# domurl 2.0 (former jsurl)
+# domurl 2.1 (former jsurl)
 
-Lightweight URL manipulation with JavaScript.
-
-**NOTE: This is major version release which changes API in comparison to version 1.x**
-
-API Changes:
-
- - Url.query.clear() is moved to Url.clearQuery()
- - Url.query.count() is moved to Url.queryLength()
- - Url.query.isEmpty() is moved to Url.isEmptyQuery()
+Lightweight URL manipulation with JavaScript for both DOM and server JavaScript.
 
 ## Goal
 
@@ -23,11 +15,12 @@ This small library intended to fix that problem
 ## Supported Browsers
 
 This library was tested under:
- - IE 7,8,9,10
- - Chrome 25, 26
- - Opera 12.15
- - Firefox 20
- - Android browser 2.3.4, 2.3.5, 4.1.3
+ - IE 7+
+ - Chrome 25+
+ - Opera 12.15+
+ - Firefox 20+
+ - Android browser 2.3+
+ - NodeJS 0.10+
 
 Theoretically it should work fine with newer or older versions of these browsers, but
 it was not fully tested yet. If you'll find any compatibility issues, please, let me know by
@@ -64,8 +57,7 @@ Could be done simply as:
     
 ## Install with NPM
 
-Domurl is available on NPM, but, please make sure you understand that it
-is browser-use only library:
+Domurl is available on NPM and is now works well for both server and browser:
 
     $ npm install domurl
 

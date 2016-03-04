@@ -1,6 +1,6 @@
 {
   "name": "domurl",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Lightweight URL manipulation with JavaScript.",
   "homepage": "https://github.com/Mikhus/jsurl",
   "keywords": [ "url", "querystring" ],
@@ -14,26 +14,23 @@
     ]
   },
   "main": "url.min.js",
-  "maintainers": [
-    {
-      "name": "Mykhailo Stadnyk",
-      "email": "mikhus@gmail.com"
-    } 
-  ],
+  "scripts": {
+    "test": "mocha ./test/url.js"
+  },
+  "maintainers": [{
+    "name": "Mykhailo Stadnyk",
+    "email": "mikhus@gmail.com"
+  }],
   "bugs": {
     "web": "https://github.com/Mikhus/jsurl/issues" 
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/mit-license.php"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/Mikhus/jsurl.git"
-    }
-  ],
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/mit-license.php"
+  }],
+  "repositories": [{
+    "type": "git",
+    "url": "https://github.com/Mikhus/jsurl.git"
+  }],
   "github": "https://github.com/Mikhus/jsurl"
 }

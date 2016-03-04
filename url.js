@@ -8,9 +8,7 @@
  * @license MIT
  * @author Mykhailo Stadnyk <mikhus@gmail.com>
  */
-/* jshint ignore:start */
 (function (ns) {
-/* jshint ignore:end */
     'use strict';
 
     // mapping between what we want and <a> element properties
@@ -39,13 +37,27 @@
     };
 
     function parse (self, url) {
-        url = url || document.location.href;
+        var currUrl, link, i, auth;
 
-        var link = document.createElement('a');
-        var auth = url.match(/\/\/(.*?)(?::(.*?))?@/) || [];
-        var i;
+        if (typeof document === 'undefined' && typeof require === 'function') {
+            currUrl = 'file://' +
+                (process.platform.match(/^win/i) ? '/' : '') +
+                require('fs').realpathSync('.');
 
-        link.href = url;
+            if (url && url.charAt(0) !== '/' && !url.match(/^\w+:\/\//)) {
+                url = currUrl + require('path').sep + url;
+            }
+
+            link = require('url').parse(url || currUrl);
+        }
+
+        else {
+            currUrl = document.location.href;
+            link = document.createElement('a');
+            link.href = url || currUrl;
+        }
+
+        auth = (url || currUrl).match(/\/\/(.*?)(?::(.*?))?@/) || [];
 
         for (i in map) {
             self[i] = link[map[i]] || '';
@@ -61,9 +73,9 @@
             defaultPorts[self.protocol] === self.port || self.port === 0
         ) ? '' : self.port; // IE fix, Android browser fix
 
-        if (!self.protocol && !/^([a-z]+:)?\/\//.test(url)) {
+        if (!self.protocol && !/^([a-z]+:)?\/\/\/?/.test(url)) {
             // is IE and path is relative
-            var base = new Url(d.location.href.match(/(.*\/)/)[0]);
+            var base = new Url(currUrl.match(/(.*\/)/)[0]);
             var basePath = base.path.split('/');
             var selfPath = self.path.split('/');
             var props = ['protocol', 'user', 'pass', 'host', 'port'];
@@ -284,7 +296,8 @@
             }
 
             for (s = paths.length; i < s; i++) {
-                paths[i] = encode(paths[i]);
+                paths[i] = !i && paths[i].match(/^\w:$/) ? paths[i] :
+                    encode(paths[i]);
             }
 
             this.path = prefix + paths.join('/');
@@ -347,5 +360,5 @@
         );
     };
 
-    ns.Url = Url;
-}(typeof module !== 'undefined' && module.exports ? module.exports : window));
+    ns[ns.exports ? 'exports' : 'Url'] = Url;
+}(typeof module !== 'undefined' && module.exports ? module : window));
