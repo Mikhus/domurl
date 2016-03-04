@@ -4,7 +4,7 @@
     "main": "url.min.js",
     "ignore": [
         ".project",
-        "test.html",
+        "test",
         "bower.json",
         "package.json",
         "README.md",
