@@ -26,7 +26,7 @@ Theoretically it should work fine with newer or older versions of these browsers
 it was not fully tested yet. If you'll find any compatibility issues, please, let me know by
 leaving a bug report here: https://github.com/Mikhus/domurl/issues
 
-You can run basic tests for your browser here: https://rawgit.com/Mikhus/domurl/master/test.html or
+You can run basic tests for your browser here: https://rawgit.com/Mikhus/domurl/master/test/url.html or
 run test.html from this repository locally. If any test has not been passed, please,
 open a bug report as described above providing browser and OS version on each test
 which has been failed.
