@@ -70,7 +70,8 @@
         self.user = decode(auth[1] || '');
         self.pass = decode(auth[2] || '');
         self.port = (
-            defaultPorts[self.protocol] === self.port || self.port === 0
+            // loosely compare because port can be a string
+            defaultPorts[self.protocol] == self.port || self.port == 0
         ) ? '' : self.port; // IE fix, Android browser fix
 
         if (!self.protocol && !/^([a-z]+:)?\/\/\/?/.test(url)) {
