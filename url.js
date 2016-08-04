@@ -11,6 +11,39 @@
 (function (ns) {
     'use strict';
 
+    // configure given url options
+    function urlConfig (url) {
+        var config = {
+            path: true,
+            query: true,
+            hash: true
+        };
+
+        if (!url) {
+            return config;
+        }
+
+        if (/^[a-z]+:/.test(url)) {
+            config.protocol = true;
+            config.host = true;
+
+            if (/[-a-z0-9]+(\.[-a-z0-9])*:\d+/i.test(url)) {
+                config.port = true;
+            }
+
+            if (/\/\/(.*?)(?::(.*?))?@/.test(url)) {
+                config.user = true;
+                config.pass = true;
+            }
+        }
+
+        return config;
+    }
+
+    var isNode = typeof window === 'undefined' &&
+        typeof global !== 'undefined' &&
+        typeof require === 'function';
+
     // mapping between what we want and <a> element properties
     var map = {
         protocol: 'protocol',
@@ -36,31 +69,38 @@
         wss: 443
     };
 
-    function parse (self, url) {
-        var currUrl, link, i, auth;
+    function parse (self, url, absolutize) {
+        var link, i, auth;
+        var currUrl = isNode ? ('file://' +
+            (process.platform.match(/^win/i) ? '/' : '') +
+            require('fs').realpathSync('.')
+        ) : document.location.href;
 
-        if (typeof document === 'undefined' && typeof require === 'function') {
-            currUrl = 'file://' +
-                (process.platform.match(/^win/i) ? '/' : '') +
-                require('fs').realpathSync('.');
+        if (!url) {
+            url = currUrl;
+        }
 
-            if (url && url.charAt(0) !== '/' && !url.match(/^\w+:\/\//)) {
-                url = currUrl + require('path').sep + url;
-            }
-
-            link = require('url').parse(url || currUrl);
+        if (isNode) {
+            link = require('url').parse(url);
         }
 
         else {
-            currUrl = document.location.href;
             link = document.createElement('a');
-            link.href = url || currUrl;
+            link.href = url;
         }
 
-        auth = (url || currUrl).match(/\/\/(.*?)(?::(.*?))?@/) || [];
+        var config = urlConfig(url);
+
+        auth = url.match(/\/\/(.*?)(?::(.*?))?@/) || [];
 
         for (i in map) {
-            self[i] = link[map[i]] || '';
+            if (config[i]) {
+                self[i] = link[map[i]] || '';
+            }
+
+            else {
+                self[i] = '';
+            }
         }
 
         // fix-up some parts
@@ -69,12 +109,18 @@
         self.hash = decode(self.hash.replace(/^#/, ''));
         self.user = decode(auth[1] || '');
         self.pass = decode(auth[2] || '');
+        /* jshint ignore:start */
         self.port = (
             // loosely compare because port can be a string
             defaultPorts[self.protocol] == self.port || self.port == 0
         ) ? '' : self.port; // IE fix, Android browser fix
+        /* jshint ignore:end */
 
-        if (!self.protocol && !/^([a-z]+:)?\/\/\/?/.test(url)) {
+        if (!config.protocol && /[^/#?]/.test(url.charAt(0))) {
+            self.path = url.split('?')[0].split('#')[0];
+        }
+
+        if (!config.protocol && absolutize) {
             // is IE and path is relative
             var base = new Url(currUrl.match(/(.*\/)/)[0]);
             var basePath = base.path.split('/');
@@ -88,23 +134,20 @@
                 self[props[i]] = base[props[i]];
             }
 
-            while (selfPath[0] == '..') { // skip all "../
+            while (selfPath[0] === '..') { // skip all "../
                 basePath.pop();
                 selfPath.shift();
             }
 
             self.path =
-                (url.charAt(0) != '/' ? basePath.join('/') : '') +
+                (url.charAt(0) !== '/' ? basePath.join('/') : '') +
                 '/' + selfPath.join('/')
             ;
         }
 
-        else {
-            // fix absolute URL's path in IE
-            self.path = self.path.replace(/^\/?/, '/');
-        }
+        self.path = self.path.replace(/^\/{2,}/, '/');
 
-        self.paths((self.path.charAt(0) == '/' ?
+        self.paths((self.path.charAt(0) === '/' ?
             self.path.slice(1) : self.path).split('/')
         );
 
@@ -232,10 +275,11 @@
      * Class Url
      *
      * @param {string} [url] - string URL representation
+     * @param {boolean} [noTransform] - do not transform to absolute URL
      * @constructor
      */
-    function Url (url) {
-        parse(this, url);
+    function Url (url, noTransform) {
+        parse(this, url, !noTransform);
     }
 
     /**

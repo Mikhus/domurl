@@ -5,6 +5,40 @@
 	</head>
 	<body>
 		<script>
+			function sanitizeURL(url) {
+				var u = new Url(url, true);
+
+				if (u.query["reload"]) {
+					delete u.query["reload"]
+				}
+
+				if (u.query["forceReload"]) {
+					delete u.query["forceReload"]
+				}
+
+				if (u.query["device"]) {
+					delete u.query["device"]
+				}
+
+				if (u.query["testwebid"]) {
+					delete u.query["testwebid"]
+				}
+
+				if (u.query["testWebId"]) {
+					delete u.query["testWebId"]
+				}
+
+				if (u.query["testWebID"]) {
+					delete u.query["testWebID"]
+				}
+
+				if (u.query["timetravel"]) {
+					delete u.query["timetravel"]
+				}
+
+				return u.toString();
+			}
+
 			function assertEqual( a, b, name) {
 				if (a == b) {
 					document.write( '<i style="color:green">' + name + " &mdash; Passed</i> ( '" + a + "' == '" + b + "')<br>");
@@ -13,7 +47,15 @@
 				else {
 					document.write( '<b style="color:red">' + name + "&mdash; Failed</b>( '" + a + "' != '" + b + "')<br>");
 				}
-			};
+			}
+
+			// noTransforms
+			document.write('<h4>Testing no transforms on given URL</h4>');
+			assertEqual(
+				sanitizeURL("SearchResults?search=new&make=Buick&year=2016&forceReload=true"),
+				'SearchResults?search=new&make=Buick&year=2016',
+				'Given source URL is not transformed'
+			);
 
 			// full URL
 			document.write( "<h4>Testing full URL</h4>");

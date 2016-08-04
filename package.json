@@ -1,6 +1,6 @@
 {
   "name": "domurl",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Lightweight URL manipulation with JavaScript.",
   "homepage": "https://github.com/Mikhus/jsurl",
   "keywords": [ "url", "querystring" ],
@@ -15,7 +15,8 @@
   },
   "main": "url.min.js",
   "scripts": {
-    "test": "mocha ./test/url.js"
+    "test": "mocha ./test/url.js",
+    "minify": "uglifyjs url.js --output url.min.js --compress --mangle"
   },
   "maintainers": [{
     "name": "Mykhailo Stadnyk",

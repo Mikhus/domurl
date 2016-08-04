@@ -3,6 +3,40 @@ var Url = require('../url.min.js');
 var fs = require('fs');
 var p = require('path');
 
+function sanitizeURL(url) {
+    var u = new Url(url, true);
+
+    if (u.query["reload"]) {
+        delete u.query["reload"]
+    }
+
+    if (u.query["forceReload"]) {
+        delete u.query["forceReload"]
+    }
+
+    if (u.query["device"]) {
+        delete u.query["device"]
+    }
+
+    if (u.query["testwebid"]) {
+        delete u.query["testwebid"]
+    }
+
+    if (u.query["testWebId"]) {
+        delete u.query["testWebId"]
+    }
+
+    if (u.query["testWebID"]) {
+        delete u.query["testWebID"]
+    }
+
+    if (u.query["timetravel"]) {
+        delete u.query["timetravel"]
+    }
+
+    return u.toString();
+}
+
 describe('Url()', function () {
     it('should construct an oobject', function () {
         var u = new Url();
@@ -14,11 +48,11 @@ describe('Url()', function () {
         process.platform.match(/^win/) && (dir = dir.substr(1));
         assert.equal(dir, fs.realpathSync('.'));
     });
-    it('should match the given argument url', function () {
-        var u = new Url('url.min.js');
-        var path = u.path.replace(/\//g, p.sep);
-        process.platform.match(/^win/) && (path = path.substr(1));
-        assert.equal(path, fs.realpathSync('.') + p.sep + 'url.min.js');
+    it('should keep URL without transformations if requested', function() {
+        assert.equal(
+            sanitizeURL("SearchResults?search=new&make=Buick&year=2016&forceReload=true"),
+            'SearchResults?search=new&make=Buick&year=2016'
+        );
     });
 });
 
