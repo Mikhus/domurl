@@ -65,9 +65,12 @@ Domurl is available on NPM and is now works well for both server and browser:
 
 ### Methods:
 
-**Url({string} url) -> {Url}**
+**Url({string} [url], {boolean} [noTransform]) -> {Url}**
 
 Constructor. If url argument is not passed, current document URL will be used.
+If second argument bypassed as true value it will try to do no transforms
+on a given source URL to keep it form as it was initially given. Otherwise,
+by default, it will try to resolve given URL to an absolute form.
 
 **Url.toString() -> {string}**
 
