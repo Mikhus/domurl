@@ -43,6 +43,7 @@
     var isNode = typeof window === 'undefined' &&
         typeof global !== 'undefined' &&
         typeof require === 'function';
+    var nodeRequire = isNode ? require : null;
 
     // mapping between what we want and <a> element properties
     var map = {
@@ -73,7 +74,7 @@
         var link, i, auth;
         var currUrl = isNode ? ('file://' +
             (process.platform.match(/^win/i) ? '/' : '') +
-            require('fs').realpathSync('.')
+            nodeRequire('fs').realpathSync('.')
         ) : document.location.href;
 
         if (!url) {
@@ -81,7 +82,7 @@
         }
 
         if (isNode) {
-            link = require('url').parse(url);
+            link = nodeRequire('url').parse(url);
         }
 
         else {
