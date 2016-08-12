@@ -43,7 +43,7 @@
     var isNode = typeof window === 'undefined' &&
         typeof global !== 'undefined' &&
         typeof require === 'function';
-    var nodeRequire = isNode ? global.require : null; // Trick to bypass Webpack's require at compile time
+    var nodeRequire = isNode ? ns['require'] : null; // Trick to bypass Webpack's require at compile time
 
     // mapping between what we want and <a> element properties
     var map = {
