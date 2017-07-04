@@ -72,15 +72,23 @@
         wss: 443
     };
 
-    function parse (self, url, absolutize) {
-        var link, i, auth;
-        var currUrl = isNode ? ('file://' +
+    var _currUrl;
+    function getCurrUrl() {
+      if (!_currUrl) {
+        _currUrl = isNode ? ('file://' +
             (process.platform.match(/^win/i) ? '/' : '') +
             nodeRequire('fs').realpathSync('.')
         ) : document.location.href;
+      }
+
+      return _currUrl;
+    }
+
+    function parse (self, url, absolutize) {
+        var link, i, auth;
 
         if (!url) {
-            url = currUrl;
+            url = getCurrUrl();
         }
 
         if (isNode) {
@@ -125,7 +133,7 @@
 
         if (!config.protocol && absolutize) {
             // is IE and path is relative
-            var base = new Url(currUrl.match(/(.*\/)/)[0]);
+            var base = new Url(getCurrUrl().match(/(.*\/)/)[0]);
             var basePath = base.path.split('/');
             var selfPath = self.path.split('/');
             var props = ['protocol', 'user', 'pass', 'host', 'port'];
