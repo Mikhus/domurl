@@ -88,3 +88,10 @@ describe('Url props interface', function () {
         assert.equal(str, u.toString());
     });
 });
+
+describe('Path url encoding', function () {
+    it('should correctly encode whitespace with %20', function () {
+        var url = new Url('http://localhost/path with space').toString();
+        assert.equal(url.toLowerCase(),'http://localhost/path%20with%20space');
+    });
+});
