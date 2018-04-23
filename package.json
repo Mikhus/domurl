@@ -21,7 +21,7 @@
   "main": "url.min.js",
   "scripts": {
     "test": "mocha ./test/url.js",
-    "minify": "uglifyjs url.js --output url.min.js --compress --mangle"
+    "minify": "./node_modules/uglify-js/bin/uglifyjs url.js --output url.min.js --compress --mangle"
   },
   "maintainers": [
     {
@@ -42,6 +42,6 @@
     "jscs": "^3.0.7",
     "jshint": "^2.9.2",
     "mocha": "^3.0.2",
-    "uglifyjs": "^2.4.10"
+    "uglify-js": "^3.3.22"
   }
 }
