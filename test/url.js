@@ -54,6 +54,13 @@ describe('Url()', function () {
             'SearchResults?search=new&make=Buick&year=2016'
         );
     });
+    it('should test absolutize url', function () {
+      var absoluteUrl = new Url('/foo');
+      assert.equal(absoluteUrl.toString(), 'file:///foo');
+
+      var noTransform = new Url('/foo', true);
+      assert.equal(noTransform.toString(), '/foo');
+    });
 });
 
 describe('Url.clearQuery()', function () {
