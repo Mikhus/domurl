@@ -171,6 +171,11 @@
 			;
 			document.write( "<h4>Testing case sensitivity in encode-decode</h4>");
 			assertEqual( url1.toLowerCase(), url2.toLowerCase(), "constructor()");
+
+            document.write( "<h4>Testing correct path encoding</h4>");
+            var u = new Url('http://server.com/path with spaces.html')
+            assertEqual( u.toString(), 'http://server.com/path%20with%20spaces.html', "Escape whitespace");
+
 		</script>
 	</body>
 </html>

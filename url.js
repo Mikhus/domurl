@@ -158,9 +158,7 @@
 
         self.path = self.path.replace(/^\/{2,}/, '/');
 
-        self.paths((self.path.charAt(0) === '/' ?
-            self.path.slice(1) : self.path).split('/')
-        );
+        self.paths(self.paths());
 
         self.query = new QueryString(self.query);
     }
