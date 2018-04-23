@@ -1,6 +1,6 @@
 {
     "name": "domurl",
-    "version": "2.1.1",
+    "version": "2.1.8",
     "license": "MIT",
     "main": "url.min.js",
     "ignore": [
