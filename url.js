@@ -72,16 +72,19 @@
         wss: 443
     };
 
-    var _currUrl;
+    var _currNodeUrl;
     function getCurrUrl() {
-      if (!_currUrl) {
-        _currUrl = isNode ? ('file://' +
-            (process.platform.match(/^win/i) ? '/' : '') +
-            nodeRequire('fs').realpathSync('.')
-        ) : document.location.href;
-      }
-
-      return _currUrl;
+        if (isNode) {
+            if (!_currNodeUrl) {
+                _currNodeUrl = ('file://' +
+                    (process.platform.match(/^win/i) ? '/' : '') +
+                    nodeRequire('fs').realpathSync('.')
+                );
+            }
+            return _currNodeUrl;
+        } else {
+            return document.location.href;
+        }
     }
 
     function parse (self, url, absolutize) {
