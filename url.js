@@ -72,7 +72,7 @@
         wss: 443
     };
 
-    var _currNodeUrl;
+    var _currNodeUrl, d = document;
     function getCurrUrl() {
         if (isNode) {
             if (!_currNodeUrl) {
@@ -83,7 +83,7 @@
             }
             return _currNodeUrl;
         } else {
-            return document.location.href;
+            return d.location.href;
         }
     }
 
@@ -99,7 +99,7 @@
         }
 
         else {
-            link = document.createElement('a');
+            link = d.createElement('a');
             link.href = url;
         }
 
