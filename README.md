@@ -75,7 +75,7 @@ by default, it will try to resolve given URL to an absolute form.
 
 **Url.toString() -> {string}**
 
-Converts URL to string representation. As far as it's spesial method, any time string
+Converts URL to string representation. As far as it's special method, any time string
 operations is performed over Url objects this method is automatically called
 
 **Url.paths({Array} [pathStrings])**
