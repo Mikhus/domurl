@@ -417,5 +417,5 @@
         );
     };
 
-    ns[ns.exports ? 'exports' : 'Url'] = Url;
+    ns[typeof ns.exports === 'object' ? 'exports' : 'Url'] = Url;
 }(typeof module !== 'undefined' && module.exports ? module : window));
