@@ -2,7 +2,11 @@
   "name": "domurl",
   "version": "2.1.9",
   "description": "Lightweight URL manipulation with JavaScript.",
-  "homepage": "https://github.com/Mikhus/jsurl",
+  "homepage": "https://github.com/Cliengo/domurl",
+  "engines": {
+    "node": "9.5.0",
+    "npm": "5.6.0"
+  },
   "keywords": [
     "url",
     "querystring"
@@ -25,8 +29,8 @@
   },
   "maintainers": [
     {
-      "name": "Mykhailo Stadnyk",
-      "email": "mikhus@gmail.com"
+      "name": "Juan Li Puma",
+      "email": "juan@cliengo.com"
     }
   ],
   "url": {
@@ -35,9 +39,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mikhus/domurl.git"
+    "url": "git@github.com:Cliengo/domurl.git"
   },
-  "github": "https://github.com/Mikhus/domurl",
+  "github": "https://github.com/Cliengo/domurl",
   "devDependencies": {
     "jscs": "^3.0.7",
     "jshint": "^2.9.2",
