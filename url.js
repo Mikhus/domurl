@@ -318,8 +318,8 @@
         var count = 0;
         var key;
 
-        for (key in this) {
-            if (!(this[key] instanceof Function)) {
+        for (var key in this.query) {
+            if (!(this.query[key] instanceof Function)) {
                 count++;
             }
         }

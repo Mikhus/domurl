@@ -79,6 +79,22 @@ describe('Url.encode(), Url.decode()', function () {
     });
 });
 
+describe('Url.queryLength()', function () {
+    it('should correctly return correct query lengths', function () {
+        var url = new Url('http://localhost/?a=%3F');
+        var queryLength = url.queryLength();
+        assert.equal(queryLength, 1);
+        
+        url = new Url('http://localhost/');
+        queryLength = url.queryLength();
+        assert.equal(queryLength, 0);
+        
+        url = new Url('http://localhost/?a=%3F&test=this&hello=world');
+        queryLength = url.queryLength();
+        assert.equal(queryLength, 3);
+    });
+});
+
 describe('Url props interface', function () {
     it('should parse all URL parts correctly', function () {
         var str = 'wss://user:pass@example.com:9999/some/path.html?foo=bar#anchor';
