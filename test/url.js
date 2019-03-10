@@ -67,7 +67,7 @@ describe('Url()', function () {
 
 describe('Url.clearQuery()', function () {
     it('should remove all vars from query string', function () {
-        const url = new Url('http://example.com/?a=&b=&c=&d=&e=&f=&g=&h#foo');
+        const url = new Url('http://example.com/?a&a=&b=&c=&d=&e=&f=&g=&h#foo');
         url.clearQuery();
         assert.equal('http://example.com/#foo', url.toString());
     });
@@ -94,6 +94,31 @@ describe('Url.queryLength()', function () {
         url = new Url('http://localhost/?a=%3F&test=this&hello=world');
         queryLength = url.queryLength();
         assert.equal(queryLength, 3);
+    });
+});
+
+describe('Url.query.toString()', function () {
+    it('should not contain undefined values, but keep var name', function () {
+        const url = new Url();
+        const url2 = new Url();
+
+        url2.clearQuery();
+        url2.query["var"] = url.query["var"];
+
+        assert.equal(url2.query.toString(), 'var');
+
+        delete url2.query.var;
+
+        assert.equal(url2.query.toString(), '');
+    });
+    it('should treat as empty val in array', function () {
+        const u = new Url('http://localhost/?a&a&a');
+        assert.equal(u.query.toString(), 'a&a&a');
+        assert.equal(u.query.a instanceof Array, true);
+        assert.equal(u.query.a[0], null);
+        assert.equal(u.query.a[1], null);
+        assert.equal(u.query.a[2], null);
+        assert.equal(u.queryLength(), 1);
     });
 });
 

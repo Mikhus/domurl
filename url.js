@@ -11,6 +11,23 @@
 (function (ns) {
     'use strict';
 
+    var RX_PROTOCOL = /^[a-z]+:/;
+    var RX_PORT = /[-a-z0-9]+(\.[-a-z0-9])*:\d+/i;
+    var RX_CREDS = /\/\/(.*?)(?::(.*?))?@/;
+    var RX_WIN = /^win/i;
+    var RX_PROTOCOL_REPL = /:$/;
+    var RX_QUERY_REPL = /^\?/;
+    var RX_HASH_REPL = /^#/;
+    var RX_PATH = /(.*\/)/;
+    var RX_PATH_FIX = /^\/{2,}/;
+    var RX_SINGLE_QUOTE = /'/g;
+    var RX_DECODE_1 = /%([ef][0-9a-f])%([89ab][0-9a-f])%([89ab][0-9a-f])/gi;
+    var RX_DECODE_2 = /%([cd][0-9a-f])%([89ab][0-9a-f])/gi;
+    var RX_DECODE_3 = /%([0-7][0-9a-f])/gi;
+    var RX_PLUS = /\+/g;
+    var RX_PATH_SEMI = /^\w:$/;
+    var RX_URL_TEST = /[^/#?]/;
+
     // configure given url options
     function urlConfig (url) {
         var config = {
@@ -23,15 +40,15 @@
             return config;
         }
 
-        if (/^[a-z]+:/.test(url)) {
+        if (RX_PROTOCOL.test(url)) {
             config.protocol = true;
             config.host = true;
 
-            if (/[-a-z0-9]+(\.[-a-z0-9])*:\d+/i.test(url)) {
+            if (RX_PORT.test(url)) {
                 config.port = true;
             }
 
-            if (/\/\/(.*?)(?::(.*?))?@/.test(url)) {
+            if (RX_CREDS.test(url)) {
                 config.user = true;
                 config.pass = true;
             }
@@ -77,7 +94,7 @@
         if (isNode) {
             if (!_currNodeUrl) {
                 _currNodeUrl = ('file://' +
-                    (process.platform.match(/^win/i) ? '/' : '') +
+                    (process.platform.match(RX_WIN) ? '/' : '') +
                     nodeRequire('fs').realpathSync('.')
                 );
             }
@@ -105,7 +122,7 @@
 
         var config = urlConfig(url);
 
-        auth = url.match(/\/\/(.*?)(?::(.*?))?@/) || [];
+        auth = url.match(RX_CREDS) || [];
 
         for (i in map) {
             if (config[i]) {
@@ -118,9 +135,9 @@
         }
 
         // fix-up some parts
-        self.protocol = self.protocol.replace(/:$/, '');
-        self.query = self.query.replace(/^\?/, '');
-        self.hash = decode(self.hash.replace(/^#/, ''));
+        self.protocol = self.protocol.replace(RX_PROTOCOL_REPL, '');
+        self.query = self.query.replace(RX_QUERY_REPL, '');
+        self.hash = decode(self.hash.replace(RX_HASH_REPL, ''));
         self.user = decode(auth[1] || '');
         self.pass = decode(auth[2] || '');
         /* jshint ignore:start */
@@ -130,13 +147,13 @@
         ) ? '' : self.port; // IE fix, Android browser fix
         /* jshint ignore:end */
 
-        if (!config.protocol && /[^/#?]/.test(url.charAt(0))) {
+        if (!config.protocol && RX_URL_TEST.test(url.charAt(0))) {
             self.path = url.split('?')[0].split('#')[0];
         }
 
         if (!config.protocol && absolutize) {
             // is IE and path is relative
-            var base = new Url(getCurrUrl().match(/(.*\/)/)[0]);
+            var base = new Url(getCurrUrl().match(RX_PATH)[0]);
             var basePath = base.path.split('/');
             var selfPath = self.path.split('/');
             var props = ['protocol', 'user', 'pass', 'host', 'port'];
@@ -159,7 +176,7 @@
             ;
         }
 
-        self.path = self.path.replace(/^\/{2,}/, '/');
+        self.path = self.path.replace(RX_PATH_FIX, '/');
 
         self.paths(self.paths());
 
@@ -167,51 +184,43 @@
     }
 
     function encode (s) {
-        return encodeURIComponent(s).replace(/'/g, '%27');
+        return encodeURIComponent(s).replace(RX_SINGLE_QUOTE, '%27');
     }
 
     function decode (s) {
-        s = s.replace(/\+/g, ' ');
+        s = s.replace(RX_PLUS, ' ');
+        s = s.replace(RX_DECODE_1, function (code, hex1, hex2, hex3) {
+            var n1 = parseInt(hex1, 16) - 0xE0;
+            var n2 = parseInt(hex2, 16) - 0x80;
 
-        s = s.replace(/%([ef][0-9a-f])%([89ab][0-9a-f])%([89ab][0-9a-f])/gi,
-            function (code, hex1, hex2, hex3) {
-                var n1 = parseInt(hex1, 16) - 0xE0;
-                var n2 = parseInt(hex2, 16) - 0x80;
-
-                if (n1 === 0 && n2 < 32) {
-                    return code;
-                }
-
-                var n3 = parseInt(hex3, 16) - 0x80;
-                var n = (n1 << 12) + (n2 << 6) + n3;
-
-                if (n > 0xFFFF) {
-                    return code;
-                }
-
-                return String.fromCharCode(n);
+            if (n1 === 0 && n2 < 32) {
+                return code;
             }
-        );
 
-        s = s.replace(/%([cd][0-9a-f])%([89ab][0-9a-f])/gi,
-            function (code, hex1, hex2) {
-                var n1 = parseInt(hex1, 16) - 0xC0;
+            var n3 = parseInt(hex3, 16) - 0x80;
+            var n = (n1 << 12) + (n2 << 6) + n3;
 
-                if (n1 < 2) {
-                    return code;
-                }
-
-                var n2 = parseInt(hex2, 16) - 0x80;
-
-                return String.fromCharCode((n1 << 6) + n2);
+            if (n > 0xFFFF) {
+                return code;
             }
-        );
 
-        return s.replace(/%([0-7][0-9a-f])/gi,
-            function (code, hex) {
-                return String.fromCharCode(parseInt(hex, 16));
+            return String.fromCharCode(n);
+        });
+        s = s.replace(RX_DECODE_2, function (code, hex1, hex2) {
+            var n1 = parseInt(hex1, 16) - 0xC0;
+
+            if (n1 < 2) {
+                return code;
             }
-        );
+
+            var n2 = parseInt(hex2, 16) - 0x80;
+
+            return String.fromCharCode((n1 << 6) + n2);
+        });
+
+        return s.replace(RX_DECODE_3, function (code, hex) {
+            return String.fromCharCode(parseInt(hex, 16));
+        });
     }
 
     /**
@@ -221,23 +230,26 @@
      * @constructor
      */
     function QueryString (qs) {
-        var re = /([^=&]+)(=([^&]*))?/g;
-        var match;
+        var parts = qs.split('&');
 
-        while ((match = re.exec(qs))) {
-            var key = decodeURIComponent(match[1].replace(/\+/g, ' '));
-            var value = match[3] ? decode(match[3]) : '';
+        for (var i = 0, s = parts.length; i < s; i++) {
+            var keyVal = parts[i].split('=');
+            var key = decodeURIComponent(keyVal[0].replace(RX_PLUS, ' '));
 
-            if (!(this[key] === undefined || this[key] === null)) {
+            if (!key) {
+                continue;
+            }
+
+            var value = keyVal[1] !== undefined ? decode(keyVal[1]) : null;
+
+            if (typeof this[key] === 'undefined') {
+                this[key] = value;
+            } else {
                 if (!(this[key] instanceof Array)) {
                     this[key] = [this[key]];
                 }
 
                 this[key].push(value);
-            }
-
-            else {
-                this[key] = value;
             }
         }
     }
@@ -253,17 +265,22 @@
         var i, ii;
 
         for (i in this) {
-            if (this[i] instanceof Function || this[i] === null) {
+            var w = this[i];
+
+            if (w instanceof Function || w === null) {
                 continue;
             }
 
-            if (this[i] instanceof Array) {
-                var len = this[i].length;
+            if (w instanceof Array) {
+                var len = w.length;
 
                 if (len) {
                     for (ii = 0; ii < len; ii++) {
+                        var v = w[ii];
                         s += s ? '&' : '';
-                        s += e(i) + '=' + e(this[i][ii]);
+                        s += e(i) + (v === undefined || v === null
+                            ? ''
+                            : '=' + e(v));
                     }
                 }
 
@@ -276,7 +293,7 @@
 
             else {
                 s += s ? '&' : '';
-                s += e(i) + '=' + e(this[i]);
+                s += e(i) + (w === undefined ? '' : '=' + e(w));
             }
         }
 
@@ -316,7 +333,6 @@
      */
     Url.prototype.queryLength = function () {
         var count = 0;
-        var key;
 
         for (var key in this.query) {
             if (!(this.query[key] instanceof Function)) {
@@ -353,8 +369,9 @@
             }
 
             for (s = paths.length; i < s; i++) {
-                paths[i] = !i && paths[i].match(/^\w:$/) ? paths[i] :
-                    encode(paths[i]);
+                paths[i] = !i && RX_PATH_SEMI.test(paths[i])
+                    ? paths[i]
+                    : encode(paths[i]);
             }
 
             this.path = prefix + paths.join('/');
