@@ -1,37 +1,39 @@
-var assert = require('assert');
-var Url = require('../url.min.js');
-var fs = require('fs');
-var p = require('path');
+'use strict';
 
-function sanitizeURL(url) {
+const assert = require('assert');
+const fs = require('fs');
+const p = require('path');
+const Url = require('../url.min.js');
+
+function sanitizeURL (url) {
     var u = new Url(url, true);
 
-    if (u.query["reload"]) {
-        delete u.query["reload"]
+    if (u.query['reload']) {
+        delete u.query['reload']
     }
 
-    if (u.query["forceReload"]) {
-        delete u.query["forceReload"]
+    if (u.query['forceReload']) {
+        delete u.query['forceReload']
     }
 
-    if (u.query["device"]) {
-        delete u.query["device"]
+    if (u.query['device']) {
+        delete u.query['device']
     }
 
-    if (u.query["testwebid"]) {
-        delete u.query["testwebid"]
+    if (u.query['testwebid']) {
+        delete u.query['testwebid']
     }
 
-    if (u.query["testWebId"]) {
-        delete u.query["testWebId"]
+    if (u.query['testWebId']) {
+        delete u.query['testWebId']
     }
 
-    if (u.query["testWebID"]) {
-        delete u.query["testWebID"]
+    if (u.query['testWebID']) {
+        delete u.query['testWebID']
     }
 
-    if (u.query["timetravel"]) {
-        delete u.query["timetravel"]
+    if (u.query['timetravel']) {
+        delete u.query['timetravel']
     }
 
     return u.toString();
@@ -39,33 +41,33 @@ function sanitizeURL(url) {
 
 describe('Url()', function () {
     it('should construct an oobject', function () {
-        var u = new Url();
+        const u = new Url();
         assert.equal(u instanceof Url, true);
     });
     it('should match current dir when construct with no argument', function () {
-        var u = new Url();
-        var dir = u.path.replace(/\//g, p.sep);
+        const u = new Url();
+        const dir = u.path.replace(/\//g, p.sep);
         process.platform.match(/^win/) && (dir = dir.substr(1));
         assert.equal(dir, fs.realpathSync('.'));
     });
-    it('should keep URL without transformations if requested', function() {
+    it('should keep URL without transformations if requested', function () {
         assert.equal(
-            sanitizeURL("SearchResults?search=new&make=Buick&year=2016&forceReload=true"),
+            sanitizeURL('SearchResults?search=new&make=Buick&year=2016&forceReload=true'),
             'SearchResults?search=new&make=Buick&year=2016'
         );
     });
     it('should test absolutize url', function () {
-      var absoluteUrl = new Url('/foo');
-      assert.equal(absoluteUrl.toString(), 'file:///foo');
+        const absoluteUrl = new Url('/foo');
+        assert.equal(absoluteUrl.toString(), 'file:///foo');
 
-      var noTransform = new Url('/foo', true);
-      assert.equal(noTransform.toString(), '/foo');
+        const noTransform = new Url('/foo', true);
+        assert.equal(noTransform.toString(), '/foo');
     });
 });
 
 describe('Url.clearQuery()', function () {
     it('should remove all vars from query string', function () {
-        var url = new Url('http://example.com/?a=&b=&c=&d=&e=&f=&g=&h#foo');
+        const url = new Url('http://example.com/?a=&b=&c=&d=&e=&f=&g=&h#foo');
         url.clearQuery();
         assert.equal('http://example.com/#foo', url.toString());
     });
@@ -81,14 +83,14 @@ describe('Url.encode(), Url.decode()', function () {
 
 describe('Url.queryLength()', function () {
     it('should correctly return correct query lengths', function () {
-        var url = new Url('http://localhost/?a=%3F');
-        var queryLength = url.queryLength();
+        let url = new Url('http://localhost/?a=%3F');
+        let queryLength = url.queryLength();
         assert.equal(queryLength, 1);
-        
+
         url = new Url('http://localhost/');
         queryLength = url.queryLength();
         assert.equal(queryLength, 0);
-        
+
         url = new Url('http://localhost/?a=%3F&test=this&hello=world');
         queryLength = url.queryLength();
         assert.equal(queryLength, 3);
@@ -97,8 +99,8 @@ describe('Url.queryLength()', function () {
 
 describe('Url props interface', function () {
     it('should parse all URL parts correctly', function () {
-        var str = 'wss://user:pass@example.com:9999/some/path.html?foo=bar#anchor';
-        var u = new Url(str);
+        const str = 'wss://user:pass@example.com:9999/some/path.html?foo=bar#anchor';
+        const u = new Url(str);
         assert.equal(u.protocol, 'wss');
         assert.equal(u.user, 'user');
         assert.equal(u.pass, 'pass');
@@ -114,7 +116,7 @@ describe('Url props interface', function () {
 
 describe('Path url encoding', function () {
     it('should correctly encode whitespace with %20', function () {
-        var url = new Url('http://localhost/path with space').toString();
+        const url = new Url('http://localhost/path with space').toString();
         assert.equal(url.toLowerCase(),'http://localhost/path%20with%20space');
     });
 });

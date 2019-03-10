@@ -407,7 +407,7 @@
         return (
             (this.protocol && (this.protocol + '://')) +
             (this.user && (
-            encode(this.user) + (this.pass && (':' + encode(this.pass))
+                encode(this.user) + (this.pass && (':' + encode(this.pass))
             ) + '@')) +
             (this.host && this.host) +
             (this.port && (':' + this.port)) +

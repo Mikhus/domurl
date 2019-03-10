@@ -40,8 +40,8 @@
   "github": "https://github.com/Mikhus/domurl",
   "devDependencies": {
     "jscs": "^3.0.7",
-    "jshint": "^2.9.2",
-    "mocha": "^3.0.2",
+    "jshint": "^2.10.1",
+    "mocha": "^6.0.2",
     "uglify-js": "^3.4.9"
   }
 }
