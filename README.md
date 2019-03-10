@@ -1,4 +1,4 @@
-# domurl 2.1 (former jsurl) 
+# domurl 2.x (former jsurl) 
 [![Build Status](https://travis-ci.org/Mikhus/domurl.svg?branch=master)](https://travis-ci.org/Mikhus/domurl) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Mikhus/domurl/master/LICENSE)
 
 Lightweight URL manipulation with JavaScript for both DOM and server JavaScript.
