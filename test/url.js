@@ -52,8 +52,8 @@ describe('Url()', function () {
     });
     it('should keep URL without transformations if requested', function () {
         assert.equal(
-            sanitizeURL('SearchResults?search=new&make=Buick&year=2016&forceReload=true'),
-            'SearchResults?search=new&make=Buick&year=2016'
+          sanitizeURL('/SearchResults?search=new&make=Buick&year=2016&forceReload=true'),
+          '/SearchResults?search=new&make=Buick&year=2016'
         );
     });
     it('should test absolutize url', function () {
