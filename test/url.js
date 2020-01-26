@@ -98,27 +98,48 @@ describe('Url.queryLength()', function () {
 });
 
 describe('Url.query.toString()', function () {
-    it('should not contain undefined values, but keep var name', function () {
-        const url = new Url();
-        const url2 = new Url();
+    it('should maintain name for null values, and drop them for undefined values', function () {
+        const originalStr = 'http://localhost/path?alice=123&bob=&carol'
+        const u = new Url(originalStr);
+        assert.equal(u.query['alice'], '123');
+        assert.equal(u.query['bob'], '');
+        assert.equal(u.query['carol'], null);
+        assert.equal(u.query['dave'], undefined);
+        assert.equal(u.toString(), originalStr);
 
-        url2.clearQuery();
-        url2.query["var"] = url.query["var"];
+        u.query['eve'] = null;
+        assert.equal(u.toString(), originalStr + '&eve');
+        u.query['eve'] = undefined;
+        assert.equal(u.toString(), originalStr);
 
-        assert.equal(url2.query.toString(), 'var');
-
-        delete url2.query.var;
-
-        assert.equal(url2.query.toString(), '');
+        u.query['frank'] = 'foo';
+        assert.equal(u.toString(), originalStr + '&frank=foo');
+        delete u.query.frank;
+        assert.equal(u.toString(), originalStr);
     });
-    it('should treat as empty val in array', function () {
-        const u = new Url('http://localhost/?a&a&a');
+
+    it('should maintain name for null values in arrays, and skip undefined values', function () {
+        const originalStr = 'http://localhost/?a&a&a';
+        const u = new Url(originalStr);
         assert.equal(u.query.toString(), 'a&a&a');
         assert.equal(u.query.a instanceof Array, true);
         assert.equal(u.query.a[0], null);
         assert.equal(u.query.a[1], null);
         assert.equal(u.query.a[2], null);
         assert.equal(u.queryLength(), 1);
+        assert.equal(u.toString(), originalStr);
+
+        u.query.a[1] = undefined;
+        assert.equal(u.toString(), 'http://localhost/?a&a');
+
+        u.query.a[1] = 'foo';
+        assert.equal(u.toString(), 'http://localhost/?a&a=foo&a');
+
+        u.query.a[1] = undefined;
+        assert.equal(u.toString(), 'http://localhost/?a&a');
+
+        u.query.a[1] = null;
+        assert.equal(u.toString(), originalStr);
     });
 });
 
@@ -141,7 +162,7 @@ describe('Url props interface', function () {
 
 describe('Path url encoding', function () {
     it('should correctly encode whitespace with %20', function () {
-        const url = new Url('http://localhost/path with space').toString();
-        assert.equal(url.toLowerCase(),'http://localhost/path%20with%20space');
+        const u = new Url('http://localhost/path with space');
+        assert.equal(u.toString().toLowerCase(),'http://localhost/path%20with%20space');
     });
 });
