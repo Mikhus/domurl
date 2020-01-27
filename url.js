@@ -242,7 +242,7 @@
 
             var value = keyVal[1] !== undefined ? decode(keyVal[1]) : null;
 
-            if (typeof this[key] === 'undefined') {
+            if (this[key] === undefined) {
                 this[key] = value;
             } else {
                 if (!(this[key] instanceof Array)) {
@@ -267,34 +267,36 @@
         for (i in this) {
             var w = this[i];
 
-            if (w instanceof Function || w === null) {
+            if (w instanceof Function || w === undefined) {
                 continue;
             }
 
             if (w instanceof Array) {
                 var len = w.length;
 
-                if (len) {
-                    for (ii = 0; ii < len; ii++) {
-                        var v = w[ii];
-                        s += s ? '&' : '';
-                        s += e(i) + (v === undefined || v === null
-                            ? ''
-                            : '=' + e(v));
-                    }
-                }
-
-                else {
-                    // parameter is an empty array, so treat as
+                if (!len) {
+                    // Parameter is an empty array, so treat as
                     // an empty argument
                     s += (s ? '&' : '') + e(i) + '=';
+                    continue;
                 }
+
+                for (ii = 0; ii < len; ii++) {
+                    var v = w[ii];
+                    if (v === undefined) {
+                        continue;
+                    }
+                    s += s ? '&' : '';
+                    s += e(i) + (v === null
+                        ? ''
+                        : '=' + e(v));
+                }
+                continue;
             }
 
-            else {
-                s += s ? '&' : '';
-                s += e(i) + (w === undefined ? '' : '=' + e(w));
-            }
+            // Plain value
+            s += s ? '&' : '';
+            s += e(i) + (w === null ? '' : '=' + e(w));
         }
 
         return s;
