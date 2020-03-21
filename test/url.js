@@ -161,8 +161,17 @@ describe('Url props interface', function () {
 });
 
 describe('Path url encoding', function () {
-    it('should correctly encode whitespace with %20', function () {
+    it('should correctly encode whitespace as %20', function () {
         const u = new Url('http://localhost/path with space');
-        assert.equal(u.toString().toLowerCase(),'http://localhost/path%20with%20space');
+        assert.equal(u.toString(),'http://localhost/path%20with%20space');
+    });
+    // TODO: Fix https://github.com/Mikhus/domurl/issues/49
+    xit('should correctly encode Plus Sign (+) to %2b in path.', function () {
+        const u = new Url('http://localhost/path+with+plus');
+        assert.equal(u.toString(), 'http://localhost/path%2bwith%2bplus');
+    });
+    xit('should preserve Plus Sign (+) in path.', function () {
+        const u = new Url('http://localhost/path+with+plus');
+        assert.equal(u.toString(), 'http://localhost/path%2bwith%2bplus');
     });
 });
