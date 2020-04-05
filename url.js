@@ -99,6 +99,8 @@
                 );
             }
             return _currNodeUrl;
+        } else if (document.location.href === 'about:srcdoc') {
+            return self.parent.document.location.href;
         } else {
             return document.location.href;
         }
