@@ -6,7 +6,8 @@
  * @see http://unixpapa.com/js/querystring.html
  *
  * @license MIT
- * @author Mykhailo Stadnyk <mikhus@gmail.com>
+ * @author Mykhailo Stadnyk <mikhus@gmail.com> and contributors
+ * @see https://github.com/Mikhus/domurl/graphs/contributors
  */
 (function (ns) {
     'use strict';
@@ -77,7 +78,8 @@
     // jscs: disable
     /**
      * default ports as defined by http://url.spec.whatwg.org/#default-port
-     * We need them to fix IE behavior, @see https://github.com/Mikhus/jsurl/issues/2
+     * We need them to fix IE behavior,
+     * @see https://github.com/Mikhus/jsurl/issues/2
      */
     // jscs: enable
     var defaultPorts = {
