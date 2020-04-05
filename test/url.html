@@ -37,19 +37,19 @@
 				}
 
 				return u.toString();
-      }
+	  }
 
-      function getCurrLocation() {
-          if (document.location.href === 'about:srcdoc') {
-              return self.parent.document.location;
-          } else {
-              return document.location;
-          }
-      }
+	  function getCurrLocation() {
+		  if (document.location.href === 'about:srcdoc') {
+			  return self.parent.document.location;
+		  } else {
+			  return document.location;
+		  }
+	  }
 
-      function getCurrUrl() {
-          return getCurrLocation().href;
-      }
+	  function getCurrUrl() {
+		  return getCurrLocation().href;
+	  }
 
 			function assertEqual( a, b, name) {
 				if (a == b) {
@@ -184,19 +184,19 @@
 			document.write( "<h4>Testing case sensitivity in encode-decode</h4>");
 			assertEqual( url1.toLowerCase(), url2.toLowerCase(), "constructor()");
 
-            document.write( "<h4>Testing correct path encoding</h4>");
-            var u = new Url('http://server.com/path with spaces.html')
-            assertEqual( u.toString(), 'http://server.com/path%20with%20spaces.html', "Escape whitespace");
+			document.write( "<h4>Testing correct path encoding</h4>");
+			var u = new Url('http://server.com/path with spaces.html')
+			assertEqual( u.toString(), 'http://server.com/path%20with%20spaces.html', "Escape whitespace");
 
-      // iframe
+	  // iframe
 			document.write( "<h4>All tests inside a srcdoc iframe</h4>");
 		</script>
-    <iframe srcdoc="
+		<iframe srcdoc="
 <script src='../url.min.js'></script>
 <script>
-  var script = document.createElement('script');
-  script.innerHTML = parent.document.getElementById('tests').innerHTML;
-  document.head.appendChild(script);
+	var script = document.createElement('script');
+	script.innerHTML = parent.document.getElementById('tests').innerHTML;
+	document.head.appendChild(script);
 </script>
 " style="width: 90vw;"></iframe>
 	</body>
