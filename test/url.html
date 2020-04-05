@@ -4,7 +4,7 @@
 		<script src="../url.min.js"></script>
 	</head>
 	<body>
-		<script>
+		<script id="tests">
 			function sanitizeURL(url) {
 				var u = new Url(url, true);
 
@@ -37,7 +37,19 @@
 				}
 
 				return u.toString();
-			}
+      }
+
+      function getCurrLocation() {
+          if (document.location.href === 'about:srcdoc') {
+              return self.parent.document.location;
+          } else {
+              return document.location;
+          }
+      }
+
+      function getCurrUrl() {
+          return getCurrLocation().href;
+      }
 
 			function assertEqual( a, b, name) {
 				if (a == b) {
@@ -77,7 +89,7 @@
 			document.write("<h4>Testing relative-absolute URL</h4>");
 			var str = '/some/path.html?foo=bar#anchor';
 			document.write('<p>Source URL = \'' + str + '\'</p>');
-			var u = new Url( str), du = new Url( document.location.href);
+			var u = new Url( str), du = new Url( getCurrUrl());
 			assertEqual( u.protocol, du.protocol, "Parse protocol");
 			assertEqual( u.user, du.user, "Parse user");
 			assertEqual( u.pass, du.pass, "Parse password");
@@ -100,8 +112,8 @@
 			document.write( "<h4>Testing relative URL</h4>");
 			var str = 'some/path.html?foo=bar#anchor';
 			document.write('<p>Source URL = \'' + str + '\'</p>');
-			var base = document.location.href.match(/(.*\/)/)[0];
-			var u = new Url( str), du = new Url( document.location.href);
+			var base = getCurrUrl().match(/(.*\/)/)[0];
+			var u = new Url( str), du = new Url( getCurrUrl());
 			assertEqual( u.protocol, du.protocol, "Parse protocol");
 			assertEqual( u.user, du.user, "Parse user");
 			assertEqual( u.pass, du.pass, "Parse password");
@@ -117,12 +129,12 @@
 			);
 
 			// relative URL with upwards
-			var dirlen = document.location.href.match(/(.*\/)/)[0].replace( /.*?\/\/.*?\//, '/').split( '/').length - 2;
+			var dirlen = getCurrUrl().match(/(.*\/)/)[0].replace( /.*?\/\/.*?\//, '/').split( '/').length - 2;
 			document.write( "<h4>Testing relative URL with upwards in path</h4>");
 			var str = '../some/path.html?foo=bar#anchor';
 			document.write('<p>Source URL = \'' + str + '\'</p>');
-			var base = document.location.href.match(/(.*\/)/)[0].replace( /[^/]+?\/$/, '');
-			var u = new Url( str), du = new Url( document.location.href);
+			var base = getCurrUrl().match(/(.*\/)/)[0].replace( /[^/]+?\/$/, '');
+			var u = new Url( str), du = new Url( getCurrUrl());
 			assertEqual( u.protocol, du.protocol, "Parse protocol");
 			assertEqual( u.user, du.user, "Parse user");
 			assertEqual( u.pass, du.pass, "Parse password");
@@ -133,17 +145,17 @@
 			assertEqual( u.query.foo, "bar", "Parse query param");
 			assertEqual( u.hash, "anchor", "Parse anchor");
 			assertEqual(
-				base + (!dirlen ? document.location.hostname + '/' : '') + 'some/path.html?foo=bar#anchor',
+				base + (!dirlen ? getCurrLocation().hostname + '/' : '') + 'some/path.html?foo=bar#anchor',
 				u.toString(), "Stringify URL"
 			);
 
 			// relative URL with upwards out of base path
-			var dirlen = document.location.href.match(/(.*\/)/)[0].replace( /.*?\/\/.*?\//, '/').split( '/').length + 1;
+			var dirlen = getCurrUrl().match(/(.*\/)/)[0].replace( /.*?\/\/.*?\//, '/').split( '/').length + 1;
 			document.write( "<h4>Testing relative URL with upwards out of base path</h4>");
 			var str = (new Array( dirlen).join( "../")) + 'some/path.html?foo=bar#anchor';
 			document.write('<p>Source URL = \'' + str + '\'</p>');
-			var base = document.location.href.match(/(.*\/)/)[0].replace( /([^/]+?\/){0,20}$/, '').replace( /\/\/\//, '//');
-			var u = new Url( str), du = new Url( document.location.href);
+			var base = getCurrUrl().match(/(.*\/)/)[0].replace( /([^/]+?\/){0,20}$/, '').replace( /\/\/\//, '//');
+			var u = new Url( str), du = new Url( getCurrUrl());
 			assertEqual( u.protocol, du.protocol, "Parse protocol");
 			assertEqual( u.user, du.user, "Parse user");
 			assertEqual( u.pass, du.pass, "Parse password");
@@ -154,7 +166,7 @@
 			assertEqual( u.query.foo, "bar", "Parse query param");
 			assertEqual( u.hash, "anchor", "Parse anchor");
 			assertEqual( 
-				base + document.location.host + '/' + 'some/path.html?foo=bar#anchor',
+				base + getCurrLocation().host + '/' + 'some/path.html?foo=bar#anchor',
 				u.toString(), "Stringify URL"
 			);
 			
@@ -175,6 +187,17 @@
             document.write( "<h4>Testing correct path encoding</h4>");
             var u = new Url('http://server.com/path with spaces.html')
             assertEqual( u.toString(), 'http://server.com/path%20with%20spaces.html', "Escape whitespace");
+
+      // iframe
+			document.write( "<h4>All tests inside a srcdoc iframe</h4>");
 		</script>
+    <iframe srcdoc="
+<script src='../url.min.js'></script>
+<script>
+  var script = document.createElement('script');
+  script.innerHTML = parent.document.getElementById('tests').innerHTML;
+  document.head.appendChild(script);
+</script>
+" style="width: 90vw;"></iframe>
 	</body>
 </html>
