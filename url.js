@@ -21,6 +21,8 @@
     var RX_HASH_REPL = /^#/;
     var RX_PATH = /(.*\/)/;
     var RX_PATH_FIX = /^\/{2,}/;
+    // https://news.ycombinator.com/item?id=3939454
+    var RX_PATH_IE_FIX = /(^\/?)/;
     var RX_SINGLE_QUOTE = /'/g;
     var RX_DECODE_1 = /%([ef][0-9a-f])%([89ab][0-9a-f])%([89ab][0-9a-f])/gi;
     var RX_DECODE_2 = /%([cd][0-9a-f])%([89ab][0-9a-f])/gi;
@@ -181,6 +183,7 @@
         }
 
         self.path = self.path.replace(RX_PATH_FIX, '/');
+        self.path = self.path.replace(RX_PATH_IE_FIX, '/');
 
         self.paths(self.paths());
 
