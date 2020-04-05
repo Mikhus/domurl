@@ -31,8 +31,6 @@
     var RX_PATH_SEMI = /^\w:$/;
     var RX_URL_TEST = /[^/#?]/;
 
-    var isIe = ~window.navigator.userAgent.indexOf('MSIE');
-
     // configure given url options
     function urlConfig (url) {
         var config = {
@@ -65,6 +63,7 @@
     var isNode = typeof window === 'undefined' &&
         typeof global !== 'undefined' &&
         typeof require === 'function';
+    var isIe = !isNode && ~ns.navigator.userAgent.indexOf('MSIE');
 
     // Trick to bypass Webpack's require at compile time
     var nodeRequire = isNode ? ns['require'] : null;
