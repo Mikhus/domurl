@@ -31,6 +31,8 @@
     var RX_PATH_SEMI = /^\w:$/;
     var RX_URL_TEST = /[^/#?]/;
 
+    var isIe = ~window.navigator.userAgent.indexOf('MSIE');
+
     // configure given url options
     function urlConfig (url) {
         var config = {
@@ -133,9 +135,7 @@
         for (i in map) {
             if (config[i]) {
                 self[i] = link[map[i]] || '';
-            }
-
-            else {
+            } else {
                 self[i] = '';
             }
         }
@@ -183,7 +183,7 @@
         }
 
         self.path = self.path.replace(RX_PATH_FIX, '/');
-        self.path = self.path.replace(RX_PATH_IE_FIX, '/');
+        isIe && (self.path = self.path.replace(RX_PATH_IE_FIX, '/'));
 
         self.paths(self.paths());
 

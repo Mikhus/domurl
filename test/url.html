@@ -64,6 +64,11 @@
 			// noTransforms
 			document.write('<h4>Testing no transforms on given URL</h4>');
 			assertEqual(
+				sanitizeURL("/SearchResults?search=new&make=Buick&year=2016&forceReload=true"),
+				'/SearchResults?search=new&make=Buick&year=2016',
+				'Given source URL is not transformed'
+			);
+			assertEqual(
 				sanitizeURL("SearchResults?search=new&make=Buick&year=2016&forceReload=true"),
 				'SearchResults?search=new&make=Buick&year=2016',
 				'Given source URL is not transformed'
@@ -99,7 +104,7 @@
 			assertEqual( u.query, "foo=bar", "Parse query");
 			assertEqual( u.query.foo, "bar", "Parse query param");
 			assertEqual( u.hash, "anchor", "Parse anchor");
-			assertEqual( 
+			assertEqual(
 				(du.protocol && (du.protocol + '://')) +
 				(du.user && (du.user + (du.pass && (':' + du.pass)) + '@')) +
 				(du.host && du.host) +
@@ -165,11 +170,11 @@
 			assertEqual( u.query, "foo=bar", "Parse query");
 			assertEqual( u.query.foo, "bar", "Parse query param");
 			assertEqual( u.hash, "anchor", "Parse anchor");
-			assertEqual( 
+			assertEqual(
 				base + getCurrLocation().host + '/' + 'some/path.html?foo=bar#anchor',
 				u.toString(), "Stringify URL"
 			);
-			
+
 			// clear query
 			var url = new Url( 'http://example.com/?a=&b=&c=&d=&e=&f=&g=&h#foo');
 			document.write( "<h4>Testing query cleanup function</h4>");
