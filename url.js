@@ -63,7 +63,8 @@
     var isNode = typeof window === 'undefined' &&
         typeof global !== 'undefined' &&
         typeof require === 'function';
-    var isIe = !isNode && ~ns.navigator.userAgent.indexOf('MSIE');
+    var isIe = !isNode && ns.navigator && ns.navigator.userAgent &&
+        ~ns.navigator.userAgent.indexOf('MSIE');
 
     // Trick to bypass Webpack's require at compile time
     var nodeRequire = isNode ? ns['require'] : null;
