@@ -128,7 +128,7 @@ mapping. String representation contains everything after "?" and to the end of Q
 ## Usage Examples
 
 ```javascript
-var u  = new Url; // curent document URL will be used
+var u  = new Url; // current document URL will be used
 // or we can instantiate as
 var u2 = new Url( "http://example.com/some/path?a=b&c=d#someAnchor");
 // it should support relative URLs also
